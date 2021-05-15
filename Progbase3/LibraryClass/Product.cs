@@ -28,7 +28,7 @@
 
 		public override string ToString()
 		{
-			return "";
+			return $"#{id} {name} {price}hrn \n {description} \n {left} left";
 		}
 	}
 }
