@@ -2,7 +2,7 @@
 
 namespace Progbase3
 {
-	class ProductsRepository
+	public class ProductsRepository
 	{
 		private SqliteConnection connection;
 

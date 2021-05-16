@@ -1,31 +1,38 @@
-﻿namespace Progbase3
+﻿using System.Collections.Generic;
+
+namespace Progbase3
 {
-	class Order
+	public class Order
 	{
 		public int id;
-		public string customer;
-		public int custom;
-		public string adress;
+		//public int custom;
+		public Customer customer;
+		public List<Product> product;
 
 		public Order()
 		{
 			id = 0;
+			/*
 			customer = "";
 			custom = 0;
-			adress = "";
+			adress = "";*/
+			customer = new Customer();
+			product = new List<Product>();
 		}
 
-		public Order(int id, string customer, int custom, string adress)
+		public Order(int id, string adress, Customer customer, List<Product> product)
 		{
 			this.id = id;
-			this.customer = customer;
+			/*this.customer = customer;
 			this.custom = custom;
-			this.adress = adress;
+			this.adress = adress;*/
+			this.customer = customer;
+			this.product = product;
 		}
 
 		public override string ToString()
 		{
-			return $"{customer}, your order #{id} {custom} will be delivered to {adress}";
+			return ""; //$"{customer}, your order #{id} {custom} will be delivered to {adress}";
 		}
 	}
 }

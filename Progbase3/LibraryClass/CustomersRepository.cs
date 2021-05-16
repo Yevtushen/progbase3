@@ -3,43 +3,41 @@ using Microsoft.Data.Sqlite;
 
 namespace Progbase3
 {
-	public class OrdersRepository
+	public class CustomersRepository
 	{
 		private SqliteConnection connection;
 
-		public OrdersRepository(SqliteConnection connection)
+		public CustomersRepository(SqliteConnection connection)
 		{
 			this.connection = connection;
 		}
 
-        static Order GetOrder(SqliteDataReader reader)
+        static Customer GetCustomer(SqliteDataReader reader)
         {
-            Order o = new Order()
+            Customer c = new Customer()
             {
                 id = int.Parse(reader.GetString(0)),
-                /*
-                customer = reader.GetString(1),
-                custom = int.Parse(reader.GetString(2)),
-                adress = reader.GetString(3)*/
+                name = reader.GetString(1),
+                adress = reader.GetString(2)
+                //orders = 
             };
-
-            return o;
+            return c;
         }
 
-        public Order GetById(int id)
+        public Customer GetById(int id)
         {
             connection.Open();
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = @"SELECT * FROM orders WHERE id = $id";
+            command.CommandText = @"SELECT * FROM customers WHERE id = $id";
             command.Parameters.AddWithValue("$id", id);
             SqliteDataReader reader = command.ExecuteReader();
 
             if (reader.Read())
             {
-                Order o = GetOrder(reader);
+                Customer c = GetCustomer(reader);
                 reader.Close();
                 connection.Close();
-                return o;
+                return c;
             }
             else
             {
@@ -48,21 +46,20 @@ namespace Progbase3
             }
         }
 
-        public long Insert(Order o)
+        public long Insert(Customer c)
         {
             connection.Open();
             SqliteCommand command = connection.CreateCommand();
             command.CommandText =
             @"
-    INSERT INTO orders (id, customer, custom, adress) 
-    VALUES ($id, $customer, $custom, $adress);
+    INSERT INTO customers (id, name, adress) 
+    VALUES ($id, $name, $adress);
  
     SELECT last_insert_rowid();
 ";
-            command.Parameters.AddWithValue("$id", o.id);
-            command.Parameters.AddWithValue("$customer", o.customer);
-            command.Parameters.AddWithValue("$custom", o.custom);
-            command.Parameters.AddWithValue("$adress", o.adress);
+            command.Parameters.AddWithValue("$id", c.id);
+            command.Parameters.AddWithValue("$name", c.name);
+            command.Parameters.AddWithValue("$adress", c.adress);
 
             long newId = (long)command.ExecuteScalar();
             /*if (newId == 0)
@@ -78,10 +75,10 @@ namespace Progbase3
         }
 
         public int Delete(int id)
-		{
+        {
             connection.Open();
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = @"DELETE FROM orders WHERE id = $id";
+            command.CommandText = @"DELETE FROM customers WHERE id = $id";
             command.Parameters.AddWithValue("$id", id);
             int nChanged = command.ExecuteNonQuery();
             connection.Close();
@@ -97,20 +94,11 @@ namespace Progbase3
             */
         }
 
-        public List<Order> GetCustomersOrders(Customer c)
-        {
+        /*public List<Order> GetCustomersOrders ()
+		{
             connection.Open();
-            List<Order> orders = new List<Order>();
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = @"SELECT FROM orders WHERE customer_id = $customer_id";
-            command.Parameters.AddWithValue("$customer_id", c.id);
-            SqliteDataReader reader = command.ExecuteReader();
-            while (reader.Read())
-			{
-                orders.Add(GetOrder(reader));
-			}
-            reader.Close();
-            return orders;
-        }
+
+        }*/
     }
 }

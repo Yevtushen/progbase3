@@ -1,28 +1,33 @@
-﻿namespace Progbase3
+﻿using System.Collections.Generic;
+
+namespace Progbase3
 {
-	class Customer
+	public class Customer
 	{
 		public int id;
 		public string name;
 		public string adress;
+		public List<Order> orders;
 
 		public Customer()
 		{
 			id = 0;
 			name = "";
 			adress = "";
+			orders = new List<Order>();
 		}
 
-		public Customer(int id, string name, string adress)
+		public Customer(int id, string name, string adress, List<Order> orders)
 		{
 			this.id = id;
 			this.name = name;
 			this.adress = adress;
+			this.orders = orders;
 		}
 
 		public override string ToString()
 		{
-			return $"#{id} {name}s adress is {adress}";
+			return $"#{id} {name}s adress is {adress}.";
 		}
 	}
 }
