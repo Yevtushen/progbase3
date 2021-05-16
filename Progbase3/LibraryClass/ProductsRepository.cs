@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using System.Collections.Generic;
+using Microsoft.Data.Sqlite;
 
 namespace Progbase3
 {
@@ -11,7 +12,7 @@ namespace Progbase3
 			this.connection = connection;
 		}
 
-        static Product GetProduct(SqliteDataReader reader)
+        public static Product GetProduct(SqliteDataReader reader)
         {
             Product p = new Product()
             {
@@ -96,5 +97,42 @@ namespace Progbase3
             }
             */
         }
+
+        public List<Product> GetExport(string valueX)
+        {
+            connection.Open();
+            List<Product> csvList = new List<Product>();
+            SqliteCommand command = connection.CreateCommand();
+            valueX = $"%{valueX}%";
+            command.CommandText = @"SELECT * FROM internetproviders WHERE name LIKE $valueX";
+            command.Parameters.AddWithValue("$valueX", valueX);
+            SqliteDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                csvList.Add(GetProduct(reader));
+            }
+            reader.Close();
+            connection.Close();
+            return csvList;
+        }
+
+        public List<Order> GetOrdersOfProduct(int order_id)
+		{
+            List<Order> orders = new List<Order>();
+            connection.Open();
+            SqliteCommand command = connection.CreateCommand();
+            command.CommandText = @"SELECT * FROM products CROSS JOIN product_to_order WHERE products.id = product_to_order.product_id AND product_to_order.order_id =$order_id";
+            command.Parameters.AddWithValue("$order_id", order_id);
+            command.CommandText = @" $product_id";
+            SqliteDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+			{
+                orders.Add(OrdersRepository.GetOrder(reader));
+			}
+            reader.Close();
+            connection.Close();
+            return orders;
+        }
+
     }
 }

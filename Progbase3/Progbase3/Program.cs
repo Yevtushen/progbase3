@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Data.Sqlite;
+using System.Collections.Generic;
 using LibraryClass;
 
 namespace Progbase3
@@ -39,11 +40,23 @@ namespace Progbase3
 			Order o = new Order()
 			{
 				id = random.Next(),
-				customer = "D:\\victo\\kpi\\progbase projects\\progbase3\\data\\generator\\customer",
-				custom = p.id,
-				adress = "D:\\victo\\kpi\\progbase projects\\progbase3\\data\\generator\\adress"
+				customer = new Customer()
+				//customer = "D:\\victo\\kpi\\progbase projects\\progbase3\\data\\generator\\customer",
 			};
 			return o;
+		}
+
+		private static Customer GetRandomCustomer()
+		{
+			Random random = new Random();
+			Customer c = new Customer()
+			{
+				id = random.Next(),
+				name = "D:\\victo\\kpi\\progbase projects\\progbase3\\data\\generator\\customer",
+				adress = "D:\\victo\\kpi\\progbase projects\\progbase3\\data\\generator\\adress",
+				orders = new List<Order>()
+			};
+			return c;
 		}
 	}
 }

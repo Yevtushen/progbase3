@@ -12,11 +12,12 @@ namespace Progbase3
 			this.connection = connection;
 		}
 
-        static Order GetOrder(SqliteDataReader reader)
+        public static Order GetOrder(SqliteDataReader reader)
         {
             Order o = new Order()
             {
                 id = int.Parse(reader.GetString(0)),
+               // customer = reader.GetString(1)
                 /*
                 customer = reader.GetString(1),
                 custom = int.Parse(reader.GetString(2)),
@@ -54,16 +55,13 @@ namespace Progbase3
             SqliteCommand command = connection.CreateCommand();
             command.CommandText =
             @"
-    INSERT INTO orders (id, customer, custom, adress) 
-    VALUES ($id, $customer, $custom, $adress);
+    INSERT INTO orders (id, customer) 
+    VALUES ($id, $customer);
  
     SELECT last_insert_rowid();
 ";
             command.Parameters.AddWithValue("$id", o.id);
             command.Parameters.AddWithValue("$customer", o.customer);
-            command.Parameters.AddWithValue("$custom", o.custom);
-            command.Parameters.AddWithValue("$adress", o.adress);
-
             long newId = (long)command.ExecuteScalar();
             /*if (newId == 0)
             {
@@ -97,20 +95,38 @@ namespace Progbase3
             */
         }
 
-        public List<Order> GetCustomersOrders(Customer c)
+        public List<Order> GetCustomersOrders(int customer_id)
         {
             connection.Open();
             List<Order> orders = new List<Order>();
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = @"SELECT FROM orders WHERE customer_id = $customer_id";
-            command.Parameters.AddWithValue("$customer_id", c.id);
+            command.CommandText = @"SELECT * FROM orders WHERE customer_id = $customer_id";
+            command.Parameters.AddWithValue("$customer_id", customer_id);
             SqliteDataReader reader = command.ExecuteReader();
             while (reader.Read())
 			{
                 orders.Add(GetOrder(reader));
 			}
             reader.Close();
+            connection.Close();
             return orders;
         }
+
+        public List<Product> GetProductsInOrder(int product_id)
+		{
+            List<Product> products = new List<Product>();
+            connection.Open();
+            SqliteCommand command = connection.CreateCommand();
+            command.CommandText = @"SELECT * FROM orders CROSS JOIN product_to_order WHERE orders.id = product_to_order.order_id AND product_to_order.product_id = $product_id";
+            command.Parameters.AddWithValue("$product_id", product_id);
+            SqliteDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+			{
+                products.Add(ProductsRepository.GetProduct(reader));
+			}
+            reader.Close();
+            return products;
+        }
+
     }
 }

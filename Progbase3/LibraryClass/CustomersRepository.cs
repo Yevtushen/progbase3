@@ -93,12 +93,5 @@ namespace Progbase3
             }
             */
         }
-
-        /*public List<Order> GetCustomersOrders ()
-		{
-            connection.Open();
-            SqliteCommand command = connection.CreateCommand();
-
-        }*/
     }
 }
