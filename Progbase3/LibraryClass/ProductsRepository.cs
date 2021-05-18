@@ -116,6 +116,38 @@ namespace Progbase3
             return csvList;
         }
 
+        public List<double> ExportProductPrice()
+		{
+            List<double> prices = new List<double>();
+            connection.Open();
+            SqliteCommand command = connection.CreateCommand();
+            command.CommandText = @"SELECT price FROM products";
+            SqliteDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+			{
+                prices.Add(double.Parse(reader.GetString(0)));
+			}
+            reader.Close();
+            connection.Close();
+            return prices;
+        }
+
+        public List<string> ExportProductName()
+        {
+            List<string> names = new List<string>();
+            connection.Open();
+            SqliteCommand command = connection.CreateCommand();
+            command.CommandText = @"SELECT name FROM products";
+            SqliteDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                names.Add(reader.GetString(0));
+            }
+            reader.Close();
+            connection.Close();
+            return names;
+        }
+
         public List<Order> GetOrdersOfProduct(int order_id)
 		{
             List<Order> orders = new List<Order>();

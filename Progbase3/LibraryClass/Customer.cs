@@ -4,7 +4,7 @@ namespace Progbase3
 {
 	public class Customer
 	{
-		public int id;
+		public long id;
 		public string name;
 		public string adress;
 		public List<Order> orders;
@@ -17,7 +17,7 @@ namespace Progbase3
 			orders = new List<Order>();
 		}
 
-		public Customer(int id, string name, string adress, List<Order> orders)
+		public Customer(long id, string name, string adress, List<Order> orders)
 		{
 			this.id = id;
 			this.name = name;

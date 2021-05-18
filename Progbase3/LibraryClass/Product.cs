@@ -4,7 +4,7 @@ namespace Progbase3
 {
 	public class Product
 	{
-		public int id;
+		public long id;
 		public string name;
 		public double price;
 		public int left;
@@ -21,7 +21,7 @@ namespace Progbase3
 			orders = new List<Order>();
 		}
 
-		public Product(int id, string name, double price, int left, string description, List<Order> orders)
+		public Product(long id, string name, double price, int left, string description, List<Order> orders)
 		{
 			this.id = id;
 			this.name = name;

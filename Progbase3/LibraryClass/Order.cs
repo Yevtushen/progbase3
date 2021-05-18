@@ -4,23 +4,26 @@ namespace Progbase3
 {
 	public class Order
 	{
-		public int id;
+		public long id;
+		public long customer_id;
 		public Customer customer;
 		public List<Product> product;
 
 		public Order()
 		{
 			id = 0;
+			customer_id = 0;
 			customer = new Customer();
 			product = new List<Product>();
 		}
 
-		public Order(int id, Customer customer, List<Product> product)
+		public Order(long id, long customer_id, Customer customer, List<Product> product)
 		{
 			this.id = id;
 			/*this.customer = customer;
 			this.custom = custom;
 			this.adress = adress;*/
+			this.customer_id = customer_id;
 			this.customer = customer;
 			this.product = product;
 		}

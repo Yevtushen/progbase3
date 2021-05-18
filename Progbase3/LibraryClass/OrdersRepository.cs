@@ -16,8 +16,8 @@ namespace Progbase3
         {
             Order o = new Order()
             {
-                id = int.Parse(reader.GetString(0)),
-               // customer = reader.GetString(1)
+                id = long.Parse(reader.GetString(0)),
+                customer_id = long.Parse(reader.GetString(1))
                 /*
                 customer = reader.GetString(1),
                 custom = int.Parse(reader.GetString(2)),
@@ -55,13 +55,13 @@ namespace Progbase3
             SqliteCommand command = connection.CreateCommand();
             command.CommandText =
             @"
-    INSERT INTO orders (id, customer) 
-    VALUES ($id, $customer);
+    INSERT INTO orders (id, customer_id) 
+    VALUES ($id, $customer_id);
  
     SELECT last_insert_rowid();
 ";
             command.Parameters.AddWithValue("$id", o.id);
-            command.Parameters.AddWithValue("$customer", o.customer);
+            command.Parameters.AddWithValue("$customer", o.customer_id);
             long newId = (long)command.ExecuteScalar();
             /*if (newId == 0)
             {
@@ -95,7 +95,7 @@ namespace Progbase3
             */
         }
 
-        public List<Order> GetCustomersOrders(int customer_id)
+        public List<Order> GetCustomersOrders(long customer_id)
         {
             connection.Open();
             List<Order> orders = new List<Order>();
