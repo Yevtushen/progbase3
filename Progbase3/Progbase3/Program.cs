@@ -16,8 +16,8 @@ namespace Progbase3
 		{
 			string databaseString = "D:\\victo\\kpi\\progbase projects\\progbase3\\data\\newbase.db";
 			SqliteConnection connection = new SqliteConnection($"Data Source={databaseString}");
-			
 		}
+
 
 		
 	}

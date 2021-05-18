@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Data.Sqlite;
 
-namespace Progbase3
+namespace LibraryClass
 {
 	public class ProductsRepository
 	{

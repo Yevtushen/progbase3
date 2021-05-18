@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.30611.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Progbase3", "Progbase3\Progbase3.csproj", "{CB81B308-2AAA-4C65-B3C9-718D005F5501}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryClass", "LibraryClass\LibraryClass.csproj", "{2B00BAF8-DFE6-48DF-88DA-E32969C98269}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryClass", "LibraryClass\LibraryClass.csproj", "{2B00BAF8-DFE6-48DF-88DA-E32969C98269}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataGenerator", "DataGenerator\DataGenerator.csproj", "{1BC686BD-4501-4AB4-8669-0FB4E7F3455F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{2B00BAF8-DFE6-48DF-88DA-E32969C98269}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B00BAF8-DFE6-48DF-88DA-E32969C98269}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B00BAF8-DFE6-48DF-88DA-E32969C98269}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BC686BD-4501-4AB4-8669-0FB4E7F3455F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BC686BD-4501-4AB4-8669-0FB4E7F3455F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BC686BD-4501-4AB4-8669-0FB4E7F3455F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BC686BD-4501-4AB4-8669-0FB4E7F3455F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

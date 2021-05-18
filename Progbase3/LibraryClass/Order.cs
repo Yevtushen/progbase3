@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Progbase3
+namespace LibraryClass
 {
 	public class Order
 	{

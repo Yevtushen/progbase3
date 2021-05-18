@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using LibraryClass;
 
-namespace Progbase3
+namespace DataGenerator
 {
-	class DataGenerator
+	class FileDataGenerator
 	{
 		public static Product GetRandomProduct()
 		{
