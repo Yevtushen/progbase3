@@ -9,11 +9,17 @@ namespace Progbase3
 	{
 		static void Main(string[] args)
 		{
-			Console.WriteLine("Hello World!");
+			string databaseString = "D:\\victo\\kpi\\progbase projects\\progbase3\\data\\newbase.db";
+			SqliteConnection connection = new SqliteConnection($"Data Source={databaseString}");
+			Application.Init();
+			Toplevel top = Application.Top;
+			UserInterface win = new UserInterface(connection);
+			top.Add(win);
+			Application.Run();
 		}
 
 
-		private static void DBProcessing()
+		/*private static void DBProcessing()
 		{
 			string databaseString = "D:\\victo\\kpi\\progbase projects\\progbase3\\data\\newbase.db";
 			SqliteConnection connection = new SqliteConnection($"Data Source={databaseString}");
@@ -24,7 +30,7 @@ namespace Progbase3
 			Application.Init();
 
 			Application.Run();
-		}
+		}*/
 		
 	}
 }

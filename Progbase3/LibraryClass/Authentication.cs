@@ -7,45 +7,58 @@ namespace LibraryClass
 {
 	class Authentication
 	{
-		public void Register(CustomersRepository customersRepository)
+		private SHA256 sha256Hash = SHA256.Create();
+		private CustomersRepository customersRepository;
+		public Customer Register(string userName, string password, string adress)
 		{
-			Random random = new Random();
-			Console.WriteLine("Enter your name:");
-			string userName = Console.ReadLine();
-			Console.WriteLine("Enter password:");
-			string password = Console.ReadLine();
-			string hashedPassword = Sha256encrypt(password);
-			Console.WriteLine("Enter your adress:");
-			string adress = Console.ReadLine();
-			Customer registed = new Customer()
+			if (customersRepository.GetToRegister(userName, adress))
 			{
-				id = random.Next(),
-				name = userName,
-				adress = adress,
-				orders = new List<Order>()
-			};
-			long newId = customersRepository.Insert(registed);
-			if (newId != 0)
-			{
-				Console.WriteLine("Registrated successfully!");
+				string hashedPassword = GetHash(sha256Hash, password);
+				Customer registed = new Customer()
+				{
+					name = userName,
+					adress = adress,
+					password = hashedPassword,
+					orders = new List<Order>()
+				};
+				long newId = customersRepository.Insert(registed);
+				if (newId != 0)
+				{
+					registed.id = newId;
+					return registed;
+				}
+				return null;
 			}
-			else
-			{
-				Console.WriteLine("Something wrong. Registration failed.");
-			}
+			return null;
 		}
 
-		public void LogIn()
+		public Customer LogIn(string possibleName, string possiblePassword)
 		{
-
+			string hashed = GetHash(sha256Hash, possiblePassword);
+			if (VerifyHash(sha256Hash, possiblePassword, hashed))
+			{
+				return customersRepository.GetToLogin(possibleName, hashed);
+			}
+			return null;
 		}
 
-		private static string Sha256encrypt(string phrase)
+		private static string GetHash(HashAlgorithm hashAlgorithm, string input)
 		{
-			UTF8Encoding encoder = new UTF8Encoding();
-			SHA256Managed sha256hasher = new SHA256Managed();
-			byte[] hashedDataBytes = sha256hasher.ComputeHash(encoder.GetBytes(phrase));
-			return Convert.ToBase64String(hashedDataBytes);
+
+			byte[] data = hashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(input));
+			var sBuilder = new StringBuilder();
+			for (int i = 0; i < data.Length; i++)
+			{
+				sBuilder.Append(data[i].ToString("x2"));
+			}
+			return sBuilder.ToString();
+		}
+
+		private static bool VerifyHash(HashAlgorithm hashAlgorithm, string input, string hash)
+		{
+			var hashOfInput = GetHash(hashAlgorithm, input);
+			StringComparer comparer = StringComparer.OrdinalIgnoreCase;
+			return comparer.Compare(hashOfInput, hash) == 0;
 		}
 	}
 }

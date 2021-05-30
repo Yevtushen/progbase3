@@ -19,7 +19,6 @@ namespace LibraryClass
                 id = int.Parse(reader.GetString(0)),
                 name = reader.GetString(1),
                 adress = reader.GetString(2)
-                //orders = 
             };
             return c;
         }
@@ -52,24 +51,15 @@ namespace LibraryClass
             SqliteCommand command = connection.CreateCommand();
             command.CommandText =
             @"
-    INSERT INTO customers (id, name, adress) 
-    VALUES ($id, $name, $adress);
+    INSERT INTO customers (adress, password) 
+    VALUES ($adress, $password);
  
     SELECT last_insert_rowid();
 ";
-            command.Parameters.AddWithValue("$id", c.id);
-            command.Parameters.AddWithValue("$name", c.name);
             command.Parameters.AddWithValue("$adress", c.adress);
-
+            command.Parameters.AddWithValue("$password", c.password);
             long newId = (long)command.ExecuteScalar();
-            /*if (newId == 0)
-            {
-                Console.WriteLine("Internet provider not added.");
-            }
-            else
-            {
-                Console.WriteLine("Internet provider added. New id is: " + newId);
-            }*/
+         
             connection.Close();
             return newId;
         }
@@ -83,15 +73,47 @@ namespace LibraryClass
             int nChanged = command.ExecuteNonQuery();
             connection.Close();
             return nChanged;
-            /*if (nChanged == 0)
+        }
+
+        public Customer GetToLogin(string name, string password)
+		{
+            connection.Open();
+            SqliteCommand command = connection.CreateCommand();
+            command.CommandText = "@SELECT * FROM customers WHERE name = $name, password = $password";
+            command.Parameters.AddWithValue("$name", name);
+            command.Parameters.AddWithValue("$password", password);
+            SqliteDataReader reader = command.ExecuteReader();
+            if (reader.Read())
+			{
+                Customer c = GetCustomer(reader);
+                reader.Close();
+                connection.Close();
+                return c;
+            }
+            else
+			{
+                reader.Close();
+                connection.Close();
+                return null;
+			}
+        }
+
+        public bool GetToRegister(string name, string adress)
+        {
+            connection.Open();
+            SqliteCommand command = connection.CreateCommand();
+            command.CommandText = "@SELECT * FROM customers WHERE name = $name, adress = $adress";
+            command.Parameters.AddWithValue("$name", name);
+            command.Parameters.AddWithValue("$adress", adress);
+            SqliteDataReader reader = command.ExecuteReader();
+            if (reader.Read())
             {
-                Console.WriteLine("Book NOT deleted.");
+                return true;
             }
             else
             {
-                Console.WriteLine("Book deleted.");
+                return false;
             }
-            */
         }
     }
 }

@@ -63,14 +63,6 @@ namespace LibraryClass
             command.Parameters.AddWithValue("$id", o.id);
             command.Parameters.AddWithValue("$customer", o.customer_id);
             long newId = (long)command.ExecuteScalar();
-            /*if (newId == 0)
-            {
-                Console.WriteLine("Internet provider not added.");
-            }
-            else
-            {
-                Console.WriteLine("Internet provider added. New id is: " + newId);
-            }*/
             connection.Close();
             return newId;
         }
@@ -84,15 +76,6 @@ namespace LibraryClass
             int nChanged = command.ExecuteNonQuery();
             connection.Close();
             return nChanged;
-            /*if (nChanged == 0)
-            {
-                Console.WriteLine("Book NOT deleted.");
-            }
-            else
-            {
-                Console.WriteLine("Book deleted.");
-            }
-            */
         }
 
         public List<Order> GetCustomersOrders(long customer_id)

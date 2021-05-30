@@ -7,6 +7,7 @@ namespace LibraryClass
 		public long id;
 		public string name;
 		public string adress;
+		public string password;
 		public List<Order> orders;
 
 		public Customer()
@@ -14,14 +15,16 @@ namespace LibraryClass
 			id = 0;
 			name = "";
 			adress = "";
+			password = "";
 			orders = new List<Order>();
 		}
 
-		public Customer(long id, string name, string adress, List<Order> orders)
+		public Customer(long id, string name, string adress, string password, List<Order> orders)
 		{
 			this.id = id;
 			this.name = name;
 			this.adress = adress;
+			this.password = password;
 			this.orders = orders;
 		}
 
