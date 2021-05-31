@@ -8,6 +8,7 @@ namespace LibraryClass
 		public string name;
 		public string adress;
 		public string password;
+		public bool moderator;
 		public List<Order> orders;
 
 		public Customer()
@@ -16,15 +17,17 @@ namespace LibraryClass
 			name = "";
 			adress = "";
 			password = "";
+			moderator = false;
 			orders = new List<Order>();
 		}
 
-		public Customer(long id, string name, string adress, string password, List<Order> orders)
+		public Customer(long id, string name, string adress, string password, bool moderator, List<Order> orders)
 		{
 			this.id = id;
 			this.name = name;
 			this.adress = adress;
 			this.password = password;
+			this.moderator = moderator;
 			this.orders = orders;
 		}
 

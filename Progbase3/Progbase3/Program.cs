@@ -9,7 +9,7 @@ namespace Progbase3
 	{
 		static void Main(string[] args)
 		{
-			string databaseString = "D:\\victo\\kpi\\progbase projects\\progbase3\\data\\newbase.db";
+			string databaseString = "../../data/newbase.db";
 			SqliteConnection connection = new SqliteConnection($"Data Source={databaseString}");
 			Application.Init();
 			Toplevel top = Application.Top;

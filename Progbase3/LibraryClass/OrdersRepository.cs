@@ -111,5 +111,25 @@ namespace LibraryClass
             return products;
         }
 
+        /*public bool Update(long id, Order o)
+		{
+            connection.Open();
+            SqliteCommand command = connection.CreateCommand();
+            command.CommandText = @"UPDATE orders SET type = $type, name = $name, comment = $comment WHERE id = $id";
+            command.Parameters.AddWithValue("$type", a.type);
+            command.Parameters.AddWithValue("$name", a.name);
+            command.Parameters.AddWithValue("$comment", a.comment);
+            command.Parameters.AddWithValue("$id", id);
+            int nChanged = command.ExecuteNonQuery();
+            connection.Close();
+            if (nChanged == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+		}*/
     }
 }

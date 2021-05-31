@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Data.Sqlite;
 
 namespace LibraryClass
@@ -18,8 +19,8 @@ namespace LibraryClass
             {
                 id = int.Parse(reader.GetString(0)),
                 name = reader.GetString(1),
-                price = double.Parse(reader.GetString(2)),
-                left = int.Parse(reader.GetString(3)),
+                price = int.Parse(reader.GetString(2)),
+                left = Convert.ToBoolean(int.Parse(reader.GetString(3))),
                 description = reader.GetString(4)
             };
 
@@ -64,16 +65,7 @@ namespace LibraryClass
             command.Parameters.AddWithValue("$price", p.price);
             command.Parameters.AddWithValue("$left", p.left);
             command.Parameters.AddWithValue("$description", p.description);
-
             long newId = (long)command.ExecuteScalar();
-            /*if (newId == 0)
-            {
-                Console.WriteLine("Internet provider not added.");
-            }
-            else
-            {
-                Console.WriteLine("Internet provider added. New id is: " + newId);
-            }*/
             connection.Close();
             return newId;
         }
@@ -87,15 +79,6 @@ namespace LibraryClass
             int nChanged = command.ExecuteNonQuery();
             connection.Close();
             return nChanged;
-            /*if (nChanged == 0)
-            {
-                Console.WriteLine("Book NOT deleted.");
-            }
-            else
-            {
-                Console.WriteLine("Book deleted.");
-            }
-            */
         }
 
         public List<Product> GetExport(string valueX)
@@ -116,16 +99,16 @@ namespace LibraryClass
             return csvList;
         }
 
-        public List<double> ExportProductPrice()
+        public List<int> ExportProductPrice()
 		{
-            List<double> prices = new List<double>();
+            List<int> prices = new List<int>();
             connection.Open();
             SqliteCommand command = connection.CreateCommand();
             command.CommandText = @"SELECT price FROM products";
             SqliteDataReader reader = command.ExecuteReader();
             while (reader.Read())
 			{
-                prices.Add(double.Parse(reader.GetString(0)));
+                prices.Add(int.Parse(reader.GetString(0)));
 			}
             reader.Close();
             connection.Close();
@@ -166,5 +149,60 @@ namespace LibraryClass
             return orders;
         }
 
+        public bool Update(long id, Product p)
+		{
+            connection.Open();
+            SqliteCommand command = connection.CreateCommand();
+            command.CommandText = @"UPDATE activities SET name = $name, price = $price, left = $left, description = $description WHERE id = $id";
+            command.Parameters.AddWithValue("$name", p.name);
+            command.Parameters.AddWithValue("$price", p.price);
+            command.Parameters.AddWithValue("$left", p.left);
+            command.Parameters.AddWithValue("$description", p.description);
+            command.Parameters.AddWithValue("$id", id);
+            int nChanged = command.ExecuteNonQuery();
+            connection.Close();
+            if (nChanged == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        private long GetCount()
+        {
+            connection.Open();
+            SqliteCommand command = connection.CreateCommand();
+            command.CommandText = @"SELECT COUNT(*) FROM products";
+            long count = (long)command.ExecuteScalar();
+            connection.Close();
+            return count;
+        }
+
+        public int GetTotalPages(int pageSize)
+        {
+            return (int)Math.Ceiling(this.GetCount() / (double)pageSize);
+        }
+
+        public List<Product> GetPage(int pageNumber, int pageSize)
+        {
+            connection.Open();
+            SqliteCommand command = connection.CreateCommand();
+            int pageEnd = pageSize * (pageNumber - 1);
+            command.CommandText = @"SELECT * FROM products LIMIT $pageSize OFFSET $pageNumberEnd";
+            command.Parameters.AddWithValue("$pageSize", pageSize);
+            command.Parameters.AddWithValue("$pageNumberEnd", pageEnd);
+            SqliteDataReader reader = command.ExecuteReader();
+            List<Product> products = new List<Product>();
+            while (reader.Read())
+            {
+                products.Add(GetProduct(reader));
+            }
+            reader.Close();
+            connection.Close();
+            return products;
+        }
     }
 }

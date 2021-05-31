@@ -13,15 +13,15 @@ namespace DataGenerator
 			Product p = new Product()
 			{
 				id = random.Next(),
-				price = random.NextDouble(),
-				left = random.Next(),
-				name = GetRandomString("D:\\victo\\kpi\\progbase projects\\progbase3\\data\\generator\\name"),
-				description = GetRandomString("D:\\victo\\kpi\\progbase projects\\progbase3\\data\\generator\\description")
+				price = random.Next(),
+				left = true,
+				name = GetRandomString("../../data/generator/name.txt"),
+				description = GetRandomString("../../data/generator/description.txt")
 			};
 			return p;
 		}
 
-		public static Order GetRandomOrder(Product p)
+		public static Order GetRandomOrder()
 		{
 			Random random = new Random();
 			Order o = new Order()
@@ -30,8 +30,8 @@ namespace DataGenerator
 				customer = new Customer()
 				{
 					id = random.Next(),
-					name = GetRandomString("D:\\victo\\kpi\\progbase projects\\progbase3\\data\\generator\\name"),
-					adress = GetRandomString("D:\\victo\\kpi\\progbase projects\\progbase3\\data\\generator\\adress"),
+					name = GetRandomString("../../data/generator/name.txt"),
+					adress = GetRandomString("../../data/generator/adress.txt"),
 					orders = new List<Order>()
 				}
 			};
@@ -44,8 +44,8 @@ namespace DataGenerator
 			Customer c = new Customer()
 			{
 				id = random.Next(),
-				name = GetRandomString("D:\\victo\\kpi\\progbase projects\\progbase3\\data\\generator\\name"),
-				adress = GetRandomString("D:\\victo\\kpi\\progbase projects\\progbase3\\data\\generator\\adress"),
+				name = GetRandomString("../../data/generator/name.txt"),
+				adress = GetRandomString("../../data/generator/adress.txt"),
 				orders = new List<Order>()
 			};
 			return c;

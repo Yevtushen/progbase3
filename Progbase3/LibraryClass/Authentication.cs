@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 
 namespace LibraryClass
 {
-	class Authentication
+	public class Authentication
 	{
 		private SHA256 sha256Hash = SHA256.Create();
 		private CustomersRepository customersRepository;
