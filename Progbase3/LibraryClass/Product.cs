@@ -7,7 +7,7 @@ namespace LibraryClass
 		public long id;
 		public string name;
 		public int price;
-		public bool left;
+		public int left;
 		public string description;
 		public List<Order> orders;
 
@@ -16,12 +16,12 @@ namespace LibraryClass
 			id = 0;
 			name = "";
 			price = 0;
-			left = false;
+			left = 0;
 			description = "";
 			orders = new List<Order>();
 		}
 
-		public Product(long id, string name, int price, bool left, string description, List<Order> orders)
+		public Product(long id, string name, int price, int left, string description, List<Order> orders)
 		{
 			this.id = id;
 			this.name = name;
@@ -33,7 +33,7 @@ namespace LibraryClass
 
 		public override string ToString()
 		{
-			return $"#{id} {name} {price}hrn \n {description} \n {left} left";
+			return $"#{id} {name}";
 		}
 	}
 }

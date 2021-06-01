@@ -11,6 +11,10 @@ namespace Progbase3
 	{
 		private CustomersRepository customersRepository;
 		private Customer customer;
+		private ProductsRepository productsRepository;
+		private Product product;
+		private OrdersRepository ordersRepository;
+		private Order order;
 		private Window window;
 		private int pageSize = 5;
 		private int pageNumber = 1;
@@ -18,6 +22,9 @@ namespace Progbase3
 		public UserInterface(SqliteConnection connection)
 		{
 			this.customersRepository = new CustomersRepository(connection);
+			this.productsRepository = new ProductsRepository(connection);
+			this.ordersRepository = new OrdersRepository(connection);
+
 			this.Title = "Authentication";
 
 			MenuBar menu = new MenuBar(new MenuBarItem[]
@@ -74,96 +81,9 @@ namespace Progbase3
 				usersBtn.Clicked += ShowUsers;
 				this.Add(usersBtn);
 			}
-
-
 		}
 
 		private void ShowUsers()
-		{
-			ListView allCustomersListView = new ListView(new List<Customer>())
-			{
-				Width = Dim.Fill(),
-				Height = Dim.Fill()
-			};
-
-			allCustomersListView.OpenSelectedItem += OnOpenCustomer;
-
-			Button prevPageBtn = new Button(2, 6, "Previous");
-			prevPageBtn.Clicked += OnPrevPage;
-			this.Add(prevPageBtn);
-
-			Label pageLabel = new Label("?")
-			{
-				X = Pos.Right(prevPageBtn) + 2,
-				Y = Pos.Top(prevPageBtn),
-				Width = 5
-			};
-			this.Add(pageLabel);
-
-			Label pagesSeparatorLabel = new Label("/")
-			{
-				X = Pos.Right(pageLabel) + 1,
-				Y = Pos.Top(prevPageBtn),
-				Width = 5
-			};
-			this.Add(pagesSeparatorLabel);
-			Label totalPagesLabel = new Label("?")
-			{
-				X = Pos.Right(pagesSeparatorLabel) + 1,
-				Y = Pos.Top(prevPageBtn),
-				Width = 5
-			};
-			this.Add(totalPagesLabel);
-
-			Button nextPageBtn = new Button("Next")
-			{
-				X = Pos.Right(totalPagesLabel) + 2,
-				Y = Pos.Top(prevPageBtn),
-			};
-			nextPageBtn.Clicked += OnNextPage;
-			this.Add(nextPageBtn);
-
-			FrameView frameView = new FrameView("Customers")
-			{
-				X = 2,
-				Y = 8,
-				Width = Dim.Fill() - 4,
-				Height = pageSize + 2
-			};
-
-			frameView.Add(allCustomersListView);
-			this.Add(frameView);
-		}
-
-		private void OnNextPage()
-		{
-			int totalPages = rep.GetTotalPages(pageSize);
-			if (pageNumber >= totalPages)
-			{
-				return;
-			}
-
-			this.pageNumber += 1;
-			ShowCurrentPage();
-		}
-
-		private void OnPrevPage()
-		{
-			if (pageNumber == 1)
-			{
-				return;
-			}
-
-			this.pageNumber -= 1;
-			ShowCurrentPage();
-		}
-
-		private void ShowCurrentPage()
-		{
-			throw new NotImplementedException();
-		}
-
-		private void OnOpenCustomer(ListViewItemEventArgs obj)
 		{
 			throw new NotImplementedException();
 		}

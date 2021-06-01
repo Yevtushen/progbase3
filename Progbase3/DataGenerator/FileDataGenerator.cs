@@ -14,7 +14,7 @@ namespace DataGenerator
 			{
 				id = random.Next(),
 				price = random.Next(),
-				left = true,
+				left = random.Next(),
 				name = GetRandomString("../../data/generator/name.txt"),
 				description = GetRandomString("../../data/generator/description.txt")
 			};

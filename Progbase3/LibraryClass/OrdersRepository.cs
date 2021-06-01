@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Data.Sqlite;
 
 namespace LibraryClass
@@ -17,11 +18,7 @@ namespace LibraryClass
             Order o = new Order()
             {
                 id = long.Parse(reader.GetString(0)),
-                customer_id = long.Parse(reader.GetString(1))
-                /*
-                customer = reader.GetString(1),
-                custom = int.Parse(reader.GetString(2)),
-                adress = reader.GetString(3)*/
+                customer_id = long.Parse(reader.GetString(1)),
             };
 
             return o;
@@ -131,5 +128,41 @@ namespace LibraryClass
                 return true;
             }
 		}*/
+
+        private long GetCount(long customer_id)
+        {
+            connection.Open();
+            SqliteCommand command = connection.CreateCommand();
+            command.CommandText = @"SELECT COUNT(*) FROM orders WHERE customer_id = $customer_id";
+            command.Parameters.AddWithValue("$customer_id", customer_id);
+            long count = (long)command.ExecuteScalar();
+            connection.Close();
+            return count;
+        }
+
+        public int GetTotalPages(int pageSize, long customer_id)
+        {
+            return (int)Math.Ceiling(this.GetCount(customer_id) / (double)pageSize);
+        }
+
+        public List<Order> GetPage(int pageNumber, int pageSize, long customer_id)
+        {
+            connection.Open();
+            SqliteCommand command = connection.CreateCommand();
+            int pageEnd = pageSize * (pageNumber - 1);
+            command.CommandText = @"SELECT * FROM orders WHERE customer_id = $customer_id LIMIT $pageSize OFFSET $pageNumberEnd";
+            command.Parameters.AddWithValue("$customer_id", customer_id);
+            command.Parameters.AddWithValue("$pageSize", pageSize);
+            command.Parameters.AddWithValue("$pageNumberEnd", pageEnd);
+            SqliteDataReader reader = command.ExecuteReader();
+            List<Order> orders = new List<Order>();
+            while (reader.Read())
+            {
+                orders.Add(GetOrder(reader));
+            }
+            reader.Close();
+            connection.Close();
+            return orders;
+        }
     }
 }

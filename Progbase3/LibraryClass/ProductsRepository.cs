@@ -20,7 +20,7 @@ namespace LibraryClass
                 id = int.Parse(reader.GetString(0)),
                 name = reader.GetString(1),
                 price = int.Parse(reader.GetString(2)),
-                left = Convert.ToBoolean(int.Parse(reader.GetString(3))),
+                left = int.Parse(reader.GetString(3)),
                 description = reader.GetString(4)
             };
 
@@ -70,7 +70,7 @@ namespace LibraryClass
             return newId;
         }
 
-        public int Delete(int id)
+        public bool Delete(long id)
         {
             connection.Open();
             SqliteCommand command = connection.CreateCommand();
@@ -78,7 +78,11 @@ namespace LibraryClass
             command.Parameters.AddWithValue("$id", id);
             int nChanged = command.ExecuteNonQuery();
             connection.Close();
-            return nChanged;
+            if (nChanged == 0)
+			{
+                return false;
+			}
+            return true;
         }
 
         public List<Product> GetExport(string valueX)
