@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 
+
 namespace LibraryClass
 {
+	[System.Serializable()]
+
 	public class Product
 	{
 		public long id;

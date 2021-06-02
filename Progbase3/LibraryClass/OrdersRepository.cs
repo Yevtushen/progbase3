@@ -92,13 +92,13 @@ namespace LibraryClass
             return orders;
         }
 
-        public List<Product> GetProductsInOrder(int product_id)
+        public List<Product> GetProductsInOrder(long customer_id)
 		{
             List<Product> products = new List<Product>();
             connection.Open();
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = @"SELECT * FROM orders CROSS JOIN product_to_order WHERE orders.id = product_to_order.order_id AND product_to_order.product_id = $product_id";
-            command.Parameters.AddWithValue("$product_id", product_id);
+            command.CommandText = @"SELECT * FROM products CROSS JOIN product_to_order WHERE products.id = product_to_order.product_id AND product_to_order.order_id = $customer_id";
+            command.Parameters.AddWithValue("$customer_id", customer_id);
             SqliteDataReader reader = command.ExecuteReader();
             while (reader.Read())
 			{

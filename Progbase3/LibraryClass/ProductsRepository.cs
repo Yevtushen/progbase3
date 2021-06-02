@@ -17,7 +17,7 @@ namespace LibraryClass
         {
             Product p = new Product()
             {
-                id = int.Parse(reader.GetString(0)),
+                id = long.Parse(reader.GetString(0)),
                 name = reader.GetString(1),
                 price = int.Parse(reader.GetString(2)),
                 left = int.Parse(reader.GetString(3)),
@@ -27,7 +27,7 @@ namespace LibraryClass
             return p;
         }
 
-        public Product GetById(int id)
+        public Product GetById(long id)
         {
             connection.Open();
             SqliteCommand command = connection.CreateCommand();
@@ -55,12 +55,12 @@ namespace LibraryClass
             SqliteCommand command = connection.CreateCommand();
             command.CommandText =
             @"
-    INSERT INTO orders (id, name, price, left, description) 
-    VALUES ($id, $name, $price, $left, $description);
+    INSERT INTO orders (name, price, left, description) 
+    VALUES ($name, $price, $left, $description);
  
     SELECT last_insert_rowid();
 ";
-            command.Parameters.AddWithValue("$id", p.id);
+
             command.Parameters.AddWithValue("$name", p.name);
             command.Parameters.AddWithValue("$price", p.price);
             command.Parameters.AddWithValue("$left", p.left);
@@ -91,7 +91,7 @@ namespace LibraryClass
             List<Product> csvList = new List<Product>();
             SqliteCommand command = connection.CreateCommand();
             valueX = $"%{valueX}%";
-            command.CommandText = @"SELECT * FROM internetproviders WHERE name LIKE $valueX";
+            command.CommandText = @"SELECT * FROM products WHERE name LIKE $valueX";
             command.Parameters.AddWithValue("$valueX", valueX);
             SqliteDataReader reader = command.ExecuteReader();
             while (reader.Read())
@@ -135,14 +135,13 @@ namespace LibraryClass
             return names;
         }
 
-        public List<Order> GetOrdersOfProduct(int order_id)
+        public List<Order> GetOrdersOfProduct(long customer_id)
 		{
             List<Order> orders = new List<Order>();
             connection.Open();
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = @"SELECT * FROM products CROSS JOIN product_to_order WHERE products.id = product_to_order.product_id AND product_to_order.order_id =$order_id";
-            command.Parameters.AddWithValue("$order_id", order_id);
-            command.CommandText = @" $product_id";
+            command.CommandText = @"SELECT * FROM products CROSS JOIN product_to_order WHERE products.id = product_to_order.product_id AND product_to_order.order_id = $customer_id";
+            command.Parameters.AddWithValue("$customer_id", customer_id);
             SqliteDataReader reader = command.ExecuteReader();
             while (reader.Read())
 			{

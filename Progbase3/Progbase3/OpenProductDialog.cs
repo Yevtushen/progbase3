@@ -16,6 +16,7 @@ namespace Progbase3
 		protected TextField priceInput;
 		protected TextField leftInput;
 		protected TextView descriptionInput;
+		protected CheckBox inOrder;
 
 		public OpenProductDialog(Customer c)
 		{
