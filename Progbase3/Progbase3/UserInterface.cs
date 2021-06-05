@@ -52,7 +52,7 @@ namespace Progbase3
 			window = new Window(frame, $"Hello, {customer.name}!");
 			this.Add(window);
 
-			Button backBtn = new Button("Back");
+			Button backBtn = new Button("Log out");
 			backBtn.Clicked += CloseNewWin;
 			this.Add(backBtn);
 

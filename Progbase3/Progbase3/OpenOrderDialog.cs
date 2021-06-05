@@ -10,6 +10,7 @@ namespace Progbase3
 	{
 		public bool deleted;
 		public bool updated;
+		protected Order order;
 		private TextField idInput;
 		private TextView productsInput;
 
@@ -51,12 +52,29 @@ namespace Progbase3
 
 		private void OnOrderDelete()
 		{
-			int index = MessageBox.Query("Delete activity", "Are you sure?", "No", "Yes");
+			int index = MessageBox.Query("Delete order", "Are you sure?", "No", "Yes");
 			if (index == 1)
 			{
 				this.deleted = true;
 				Application.RequestStop();
 			}
+		}
+
+		public Order GetOrder()
+		{
+			return this.order;
+		}
+		
+		public void SetOrder (Order order)
+		{
+			this.order = order;
+			idInput.Text = order.id.ToString();
+			string products = "";
+			foreach (var p in order.products)
+			{
+				products += p.name + " ";
+			}
+			productsInput.Text = products;
 		}
 
 		private void OnOpenDialogCanceled()

@@ -21,8 +21,8 @@ namespace Progbase3
 
 			Button okBtn = new Button("OK");
 			Button canselBtn = new Button("Cancel");
-			canselBtn.Clicked += OnCreatDialogCanceled;
-			okBtn.Clicked += OnCreatDialogSubmitted;
+			canselBtn.Clicked += OnCreateDialogCanceled;
+			okBtn.Clicked += OnCreateDialogSubmitted;
 			this.AddButton(canselBtn);
 			this.AddButton(okBtn);
 
@@ -81,13 +81,13 @@ namespace Progbase3
 			};
 		}
 
-		private void OnCreatDialogSubmitted()
+		private void OnCreateDialogSubmitted()
 		{
 			this.canceled = false;
 			Application.RequestStop();
 		}
 
-		private void OnCreatDialogCanceled()
+		private void OnCreateDialogCanceled()
 		{
 			this.canceled = true;
 			Application.RequestStop();

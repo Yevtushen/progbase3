@@ -11,6 +11,9 @@ namespace Progbase3
 
 		protected ProductsRepository rep;
 		private Customer c;
+		protected Order order;
+		private TextField searchField;
+		private string filterValue = "";
 		protected ListView allProductsListView;
 		private Button prevPageBtn;
 		private Button nextPageBtn;
@@ -22,6 +25,11 @@ namespace Progbase3
 		public ProductsWindow(Customer c)
 		{
 			this.c = c;
+
+			searchField = new TextField(2, 1, 20, "");
+			searchField.KeyPress += OnSearchPress;
+			this.Add(searchField);
+
 			allProductsListView = new ListView(new List<Product>())
 			{
 				Width = Dim.Fill(),
@@ -80,8 +88,38 @@ namespace Progbase3
 				Height = pageSize + 2
 			};
 
+			Button submitOrderBtn = new Button(2, 2, "Submit your order");
+			if (order.products == null)
+			{
+				submitOrderBtn.Visible = false;
+			}
+			submitOrderBtn.Clicked += OnSubmitOrder;
+
+			Button backBtn = new Button(2, 15, "Back");
+			backBtn.Clicked += CloseWin;
+			this.Add(backBtn);
+
 			frameView.Add(allProductsListView);
 			this.Add(frameView);
+		}
+
+		private void CloseWin()
+		{
+			Remove(this);
+		}
+
+		private void OnSearchPress(KeyEventEventArgs args)
+		{
+			if (args.KeyEvent.Key == Key.Enter)
+			{
+				filterValue = searchField.Text.ToString();
+				ShowCurrentPage();
+			}
+		}
+
+		private void OnSubmitOrder()
+		{
+			Remove(this);
 		}
 
 		private void OnCreateButtonClicked()
@@ -93,7 +131,7 @@ namespace Progbase3
 				Product p = dialog.GetProduct();
 				long activid = rep.Insert(p);
 				p.id = activid;
-				allProductsListView.SetSource(rep.GetPage(pageNumber, pageSize));
+				allProductsListView.SetSource(rep.GetSearchPage(filterValue, pageNumber, pageSize));
 			}
 		}
 
@@ -110,7 +148,7 @@ namespace Progbase3
 
 		private void OnNextPage()
 		{
-			int totalPages = rep.GetTotalPages(pageSize);
+			int totalPages = rep.GetSearchPagesCount(pageSize, filterValue);
 			if (pageNumber >= totalPages)
 			{
 				return;
@@ -123,16 +161,20 @@ namespace Progbase3
 		private void ShowCurrentPage()
 		{
 			this.pageLabel.Text = pageNumber.ToString();
-			this.totalPagesLabel.Text = rep.GetTotalPages(pageSize).ToString();
-			this.allProductsListView.SetSource(rep.GetPage(pageNumber, pageSize));
+			this.totalPagesLabel.Text = rep.GetSearchPagesCount(pageSize, filterValue).ToString();
+			this.allProductsListView.SetSource(rep.GetSearchPage(filterValue, pageNumber, pageSize));
 		}
 
 		private void OnOpenProduct(ListViewItemEventArgs args)
 		{
 			Product p = (Product)args.Value;
-			OpenProductDialog dialog = new OpenProductDialog(c);
+			OpenProductDialog dialog = new OpenProductDialog(c, order);
 			dialog.SetProduct(p);
 			Application.Run(dialog);
+			if (dialog.inOrder.Checked)
+			{
+				order.products.Add(p);
+			}
 			if (dialog.deleted)
 			{
 				bool result = rep.Delete(c.id);

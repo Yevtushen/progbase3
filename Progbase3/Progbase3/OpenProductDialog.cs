@@ -16,11 +16,14 @@ namespace Progbase3
 		protected TextField priceInput;
 		protected TextField leftInput;
 		protected TextView descriptionInput;
-		protected CheckBox inOrder;
+		public CheckBox inOrder;
+		private Order order;
 
-		public OpenProductDialog(Customer c)
+		public OpenProductDialog(Customer c, Order order)
 		{
 			this.Title = "Open Product";
+
+			this.order = order;
 
 			Button backBtn = new Button("Back");
 			backBtn.Clicked += OnOpenDialogCanceled;
@@ -79,6 +82,14 @@ namespace Progbase3
 			};
 			this.Add(descriptionLbl, descriptionInput);
 
+			inOrder = new CheckBox(2, 12, "Put in order?") { Checked = false };
+			this.Add(inOrder);
+
+			if (product.left <= 0)
+			{
+				inOrder.Visible = false;
+			}
+
 			if (c.moderator)
 			{
 				Button editBtn = new Button(2, 16, "Update");
@@ -135,10 +146,18 @@ namespace Progbase3
 			this.leftInput.Text = product.left.ToString();
 			this.descriptionInput.Text = product.description;
 
+			if (this.inOrder.Checked == true)
+			{
+				product.orders.Add(order);
+			}
 		}
 
 		public Product GetProduct()
 		{
+			if (inOrder.Checked == true)
+			{
+				product.left--;
+			}
 			return this.product;
 		}
 
@@ -146,6 +165,5 @@ namespace Progbase3
 		{
 			Application.RequestStop();
 		}
-
 	}
 }

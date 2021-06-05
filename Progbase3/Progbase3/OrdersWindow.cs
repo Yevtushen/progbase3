@@ -23,13 +23,16 @@ namespace Progbase3
 		{
 			this.customer = customer;
 
-			allOrdersListView = new ListView(new List<Customer>())
+			Button createBtn = new Button(2, 2, "Create new order");
+			createBtn.Clicked += CreateOrder;
+
+			allOrdersListView = new ListView(new List<Order>())
 			{
 				Width = Dim.Fill(),
 				Height = Dim.Fill()
 			};
 
-			allOrdersListView.OpenSelectedItem += OnOpenCustomer;
+			allOrdersListView.OpenSelectedItem += OnOpenOrder;
 
 			prevPageBtn = new Button(2, 6, "Previous");
 			prevPageBtn.Clicked += OnPrevPage;
@@ -74,8 +77,22 @@ namespace Progbase3
 				Height = pageSize + 2
 			};
 
+			Button backBtn = new Button(2, 15, "Back");
+			backBtn.Clicked += CloseWin;
+			this.Add(backBtn);
+
 			frameView.Add(allOrdersListView);
 			this.Add(frameView);
+		}
+
+		private void CloseWin()
+		{
+			Remove(this);
+		}
+
+		private void CreateOrder()
+		{
+			ProductsWindow window = new ProductsWindow(customer);
 		}
 
 		private void OnPrevPage()
@@ -108,9 +125,10 @@ namespace Progbase3
 			this.allOrdersListView.SetSource(rep.GetPage(pageNumber, pageSize, customer.id));
 		}
 
-		private void OnOpenCustomer(ListViewItemEventArgs obj)
+		private void OnOpenOrder(ListViewItemEventArgs args)
 		{
-			throw new NotImplementedException();
+			OpenOrderDialog dialog = new OpenOrderDialog(customer);
+
 		}
 	}
 }

@@ -103,36 +103,20 @@ namespace LibraryClass
             return csvList;
         }
 
-        public List<int> ExportProductPrice()
-		{
-            List<int> prices = new List<int>();
-            connection.Open();
-            SqliteCommand command = connection.CreateCommand();
-            command.CommandText = @"SELECT price FROM products";
-            SqliteDataReader reader = command.ExecuteReader();
-            while (reader.Read())
-			{
-                prices.Add(int.Parse(reader.GetString(0)));
-			}
-            reader.Close();
-            connection.Close();
-            return prices;
-        }
-
-        public List<string> ExportProductName()
+        public List<Product> GetProducts()
         {
-            List<string> names = new List<string>();
             connection.Open();
+            List<Product> productsList = new List<Product>();
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = @"SELECT name FROM products";
+            command.CommandText = @"SELECT * FROM products";
             SqliteDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
-                names.Add(reader.GetString(0));
+                productsList.Add(GetProduct(reader));
             }
             reader.Close();
             connection.Close();
-            return names;
+            return productsList;
         }
 
         public List<Order> GetOrdersOfProduct(long customer_id)
@@ -206,6 +190,65 @@ namespace LibraryClass
             reader.Close();
             connection.Close();
             return products;
+        }
+
+        public int GetSearchPagesCount(int pageSize, string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return GetTotalPages(pageSize);
+            }
+            if (pageSize < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(pageSize));
+            }
+
+            connection.Open();
+            value = $"%{value}%";
+            List<Product> searchProducts = new List<Product>();
+            SqliteCommand command = connection.CreateCommand();
+            command.CommandText = @"SELECT * FROM products WHERE name LIKE $value";
+            command.Parameters.AddWithValue("$value", value);
+            SqliteDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                searchProducts.Add(GetProduct(reader));
+            }
+            return (int)Math.Ceiling(searchProducts.Count / (double)pageSize);
+        }
+
+        public List<Product> GetSearchPage(string value, int pageNumber, int pageSize)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return GetPage(pageNumber, pageSize);
+            }
+            if (pageNumber < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(pageNumber));
+            }
+            if (pageSize < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(pageSize));
+            }
+
+            connection.Open();
+            SqliteCommand command = connection.CreateCommand();
+            int pageEnd = pageSize * (pageNumber - 1);
+            value = $"%{value}%";
+            command.CommandText = @"SELECT * FROM products LIMIT $pageSize OFFSET $pageNumberEnd WHERE name LIKE $value";
+            command.Parameters.AddWithValue("$pageSize", pageSize);
+            command.Parameters.AddWithValue("$pageNumberEnd", pageEnd);
+            command.Parameters.AddWithValue("$value", value);
+            SqliteDataReader reader = command.ExecuteReader();
+            List<Product> page = new List<Product>();
+            while (reader.Read())
+            {
+                page.Add(GetProduct(reader));
+            }
+            reader.Close();
+            connection.Close();
+            return page;
         }
     }
 }

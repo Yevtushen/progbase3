@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using Terminal.Gui;
 using LibraryClass;
+using System.Security.Cryptography;
+
+
 
 namespace Progbase3
 {
@@ -12,6 +15,8 @@ namespace Progbase3
 		protected TextField nameInput;
 		protected TextField adressInput;
 		protected CheckBox isModerator;
+		protected TextField passwordInput;
+		private SHA256 sha256Hash = SHA256.Create();
 
 		public EditCustomerDialog()
 		{
@@ -31,8 +36,21 @@ namespace Progbase3
 			{
 				name = nameInput.Text.ToString(),
 				adress = adressInput.Text.ToString(),
-				moderator = bool.Parse(isModerator.Text.ToString())
+				moderator = bool.Parse(isModerator.Text.ToString()),
+				password = GetHash(sha256Hash, passwordInput.Text.ToString())
 			};
+		}
+
+		private static string GetHash(HashAlgorithm hashAlgorithm, string input)
+		{
+
+			byte[] data = hashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(input));
+			var sBuilder = new StringBuilder();
+			for (int i = 0; i < data.Length; i++)
+			{
+				sBuilder.Append(data[i].ToString("x2"));
+			}
+			return sBuilder.ToString();
 		}
 	}
 }

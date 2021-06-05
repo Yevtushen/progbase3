@@ -179,5 +179,64 @@ namespace LibraryClass
             connection.Close();
             return customers;
         }
+
+        public int GetSearchPagesCount(int pageSize, string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return GetTotalPages(pageSize);
+            }
+            if (pageSize < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(pageSize));
+            }
+
+            connection.Open();
+            value = $"%{value}%";
+            List<Customer> searchCustomers = new List<Customer>();
+            SqliteCommand command = connection.CreateCommand();
+            command.CommandText = @"SELECT * FROM customers WHERE name LIKE $value";
+            command.Parameters.AddWithValue("$value", value);
+            SqliteDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                searchCustomers.Add(GetCustomer(reader));
+            }
+            return (int)Math.Ceiling(searchCustomers.Count / (double)pageSize);
+        }
+
+        public List<Customer> GetSearchPage(string value, int pageNumber, int pageSize)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return GetPage(pageNumber, pageSize);
+            }
+            if (pageNumber < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(pageNumber));
+            }
+            if (pageSize < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(pageSize));
+            }
+
+            connection.Open();
+            SqliteCommand command = connection.CreateCommand();
+            int pageEnd = pageSize * (pageNumber - 1);
+            value = $"%{value}%";
+            command.CommandText = @"SELECT * FROM customers LIMIT $pageSize OFFSET $pageNumberEnd WHERE name LIKE $value";
+            command.Parameters.AddWithValue("$pageSize", pageSize);
+            command.Parameters.AddWithValue("$pageNumberEnd", pageEnd);
+            command.Parameters.AddWithValue("$value", value);
+            SqliteDataReader reader = command.ExecuteReader();
+            List<Customer> page = new List<Customer>();
+            while (reader.Read())
+            {
+                page.Add(GetCustomer(reader));
+            }
+            reader.Close();
+            connection.Close();
+            return page;
+        }
     }
 }

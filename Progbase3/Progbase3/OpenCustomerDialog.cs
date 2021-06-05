@@ -15,6 +15,7 @@ namespace Progbase3
 		protected TextField nameInput;
 		protected TextField adressInput;
 		protected CheckBox isModerator;
+		private TextField passwordInput;
 
 		public OpenCustomerDialog(Customer c)
 		{
@@ -56,10 +57,21 @@ namespace Progbase3
 			};
 			this.Add(adressLbl, adressInput);
 
-			//Label IsModeratorLbl = new Label("Is moderator");
-			isModerator = new CheckBox(2, 8, "Is moderator");
+			isModerator = new CheckBox(2, 10, "Is moderator");
 			isModerator.Visible = false;
 			this.Add(isModerator);
+
+			Label passwordLbl = new Label(2, 8, "Your password");
+			passwordLbl.Visible = false;
+			passwordInput = new TextField("")
+			{ 
+				X = rightColumnX,
+				Y = Pos.Top(passwordLbl),
+				Width = 40,
+				ReadOnly = true,
+				Visible = false
+			};
+			this.Add(passwordLbl, passwordInput);
 
 			Button editBtn = new Button(2, 16, "Update");
 			editBtn.Clicked += OnCustomerEdit;
@@ -76,7 +88,7 @@ namespace Progbase3
 
 		private void OnCustomerDelete()
 		{
-			int index = MessageBox.Query("Delete activity", "Are you sure?", "No", "Yes");
+			int index = MessageBox.Query("Delete customer", "Are you sure?", "No", "Yes");
 			if (index == 1)
 			{
 				this.deleted = true;
@@ -93,6 +105,8 @@ namespace Progbase3
 			{
 				nameInput.ReadOnly = false;
 				adressInput.ReadOnly = false;
+				passwordInput.Visible = true;
+				passwordInput.ReadOnly = false;
 				if (customer.moderator)
 				{
 					isModerator.Visible = true;
@@ -103,6 +117,8 @@ namespace Progbase3
 			}
 			nameInput.ReadOnly = true;
 			adressInput.ReadOnly = true;
+			passwordInput.ReadOnly = false;
+			passwordInput.Visible = false;
 			isModerator.Visible = false;
 		}
 
@@ -111,15 +127,16 @@ namespace Progbase3
 			Application.RequestStop();
 		}
 
-		internal void SetCustomer(Customer customer)
+		public void SetCustomer(Customer customer)
 		{
 			this.customer = customer;
 			this.idInput.Text = customer.id.ToString();
 			this.nameInput.Text = customer.name;
 			this.adressInput.Text = customer.adress;
+			
 		}
 
-		internal Customer GetCustomer()
+		public Customer GetCustomer()
 		{
 			return this.customer;
 		}

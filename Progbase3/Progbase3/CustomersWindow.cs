@@ -11,6 +11,8 @@ namespace Progbase3
 		private Window window;
 		protected CustomersRepository rep;
 		private Customer customer;
+		private TextField searchField;
+		private string filterValue = "";
 		protected ListView allCustomersListView;
 		private Button prevPageBtn;
 		private Button nextPageBtn;
@@ -28,6 +30,10 @@ namespace Progbase3
 
 			if (customer.moderator)
 			{
+				searchField = new TextField(2, 1, 20, "");
+				searchField.KeyPress += OnSearchPress;
+				this.Add(searchField);
+
 				allCustomersListView = new ListView(new List<Customer>())
 				{
 					Width = Dim.Fill(),
@@ -79,8 +85,26 @@ namespace Progbase3
 					Height = pageSize + 2
 				};
 
+				Button backBtn = new Button(2, 15, "Back");
+				backBtn.Clicked += CloseWin;
+				this.Add(backBtn);
+
 				frameView.Add(allCustomersListView);
 				this.Add(frameView);
+			}
+		}
+
+		private void CloseWin()
+		{
+			Remove(this);
+		}
+
+		private void OnSearchPress(KeyEventEventArgs args)
+		{
+			if (args.KeyEvent.Key == Key.Enter)
+			{
+				filterValue = searchField.Text.ToString();
+				ShowCurrentPage();
 			}
 		}
 
@@ -137,8 +161,8 @@ namespace Progbase3
 		private void ShowCurrentPage()
 		{
 			this.pageLabel.Text = pageNumber.ToString();
-			this.totalPagesLabel.Text = rep.GetTotalPages(pageSize).ToString();
-			this.allCustomersListView.SetSource(rep.GetPage(pageNumber, pageSize));
+			this.totalPagesLabel.Text = rep.GetSearchPagesCount(pageSize, filterValue).ToString();
+			this.allCustomersListView.SetSource(rep.GetSearchPage(filterValue, pageNumber, pageSize));
 		}
 
 		private void OnOpenCustomer(ListViewItemEventArgs args)
@@ -152,7 +176,7 @@ namespace Progbase3
 				bool result = rep.Delete(c.id);
 				if (result)
 				{
-					int pages = rep.GetTotalPages(pageSize);
+					int pages = rep.GetSearchPagesCount(pageSize, filterValue);
 					if (pageNumber > pages && pageNumber > 1)
 					{
 						pageNumber -= 1;
