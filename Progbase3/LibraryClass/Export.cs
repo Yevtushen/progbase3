@@ -7,14 +7,13 @@ using System.IO.Compression;
 
 namespace LibraryClass
 {
-	class Export
+	public class Export
 	{
-		private ProductsRepository rep;
 
-		public void ExportProducts(string value, string xmlFilePathExp, string sourceFolder, string zipFile)
+		public void ExportProducts(ProductsRepository rep, string value, string xmlFilePath, string sourceFolder, string zipFile)
 		{
 			XmlSerializer formatter = new XmlSerializer(typeof(List<Product>));
-			using (FileStream fs = new FileStream(xmlFilePathExp, FileMode.OpenOrCreate))
+			using (FileStream fs = new FileStream(xmlFilePath, FileMode.OpenOrCreate))
 			{
 				formatter.Serialize(fs, rep.GetExport(value));
 			}

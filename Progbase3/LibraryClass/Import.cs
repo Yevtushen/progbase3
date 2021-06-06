@@ -7,24 +7,19 @@ using System.Xml.Serialization;
 
 namespace LibraryClass
 {
-	class Import
+	public class Import
 	{
-		private ProductsRepository rep;
 
-		public void ImportProduct(string targetFolder, string zipFile, string xmlFilePathImp, bool add)
+		public void ImportProduct(ProductsRepository rep, string targetFolder, string zipFile, string xmlFilePath)
 		{
 			ZipFile.ExtractToDirectory(zipFile, targetFolder);
 
 			XmlSerializer formatter = new XmlSerializer(typeof(List<Product>));
-			using (FileStream fs = new FileStream(xmlFilePathImp, FileMode.OpenOrCreate))
+			using (FileStream fs = new FileStream(xmlFilePath, FileMode.OpenOrCreate))
 			{
 				Product product = (Product)formatter.Deserialize(fs);
-				if (add)
-				{
-					rep.Insert(product);
-				}
+				rep.Insert(product);
 			}
-
 		}
 	}
 }
