@@ -8,31 +8,33 @@ namespace LibraryClass
 	public class Authentication
 	{
 		private SHA256 sha256Hash = SHA256.Create();
-		private CustomersRepository customersRepository;
-		public Customer Register(string userName, string password, string adress)
+
+		public Customer Register(CustomersRepository customersRepository, string userName, string password, string adress)
 		{
-			if (customersRepository.GetToRegister(userName, adress))
+
+
+			if (!customersRepository.GetToRegister(userName, adress))
 			{
 				string hashedPassword = GetHash(sha256Hash, password);
-				Customer registed = new Customer()
+				Customer registered = new Customer()
 				{
 					name = userName,
 					adress = adress,
 					password = hashedPassword,
 					orders = new List<Order>()
 				};
-				long newId = customersRepository.Insert(registed);
+				long newId = customersRepository.Insert(registered);
 				if (newId != 0)
 				{
-					registed.id = newId;
-					return registed;
+					registered.id = newId;
+					return registered;
 				}
 				return null;
 			}
 			return null;
 		}
 
-		public Customer LogIn(string possibleName, string possiblePassword)
+		public Customer LogIn(CustomersRepository customersRepository, string possibleName, string possiblePassword)
 		{
 			string hashed = GetHash(sha256Hash, possiblePassword);
 			if (VerifyHash(sha256Hash, possiblePassword, hashed))

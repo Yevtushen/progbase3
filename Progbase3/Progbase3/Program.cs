@@ -9,7 +9,7 @@ namespace Progbase3
 	{
 		static void Main(string[] args)
 		{
-			string databaseString = "../../data/newbase.db";
+			string databaseString = "../../../../../data/base.db";
 			SqliteConnection connection = new SqliteConnection($"Data Source={databaseString}");
 			Application.Init();
 			Toplevel top = Application.Top;

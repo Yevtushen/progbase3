@@ -13,7 +13,6 @@ namespace Progbase3
 		protected TextField priceInput;
 		protected TextField leftInput;
 		protected TextView descriptionInput;
-		protected CheckBox inOrder;
 
 		public CreateProductDialog()
 		{
@@ -78,6 +77,7 @@ namespace Progbase3
 				price = int.Parse(priceInput.Text.ToString()),
 				left = int.Parse(leftInput.Text.ToString()),
 				description = descriptionInput.Text.ToString()
+				
 			};
 		}
 

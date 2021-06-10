@@ -88,7 +88,7 @@ namespace LibraryClass
 		{
             connection.Open();
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = "@SELECT * FROM customers WHERE name = $name, password = $password";
+            command.CommandText = @"SELECT * FROM customers WHERE name = $name AND password = $password";
             command.Parameters.AddWithValue("$name", name);
             command.Parameters.AddWithValue("$password", password);
             SqliteDataReader reader = command.ExecuteReader();
@@ -111,7 +111,7 @@ namespace LibraryClass
         {
             connection.Open();
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = "@SELECT * FROM customers WHERE name = $name, adress = $adress";
+            command.CommandText = @"SELECT * FROM customers WHERE name = $name AND adress = $adress";
             command.Parameters.AddWithValue("$name", name);
             command.Parameters.AddWithValue("$adress", adress);
             SqliteDataReader reader = command.ExecuteReader();

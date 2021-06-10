@@ -18,6 +18,10 @@ namespace Progbase3
 
 			this.Title = "Registration";
 
+			Button submitBtn = new Button("OK!");
+			submitBtn.Clicked += UserSubmit;
+			this.AddButton(submitBtn);
+
 			Button backBtn = new Button("Back");
 			backBtn.Clicked += OnDialogCanceled;
 			this.AddButton(backBtn);
@@ -45,11 +49,13 @@ namespace Progbase3
 			{
 				X = rightColumnX,
 				Y = Pos.Top(passwordLbl),
+				Width = 40,
 				Secret = true
 			};
 			this.Add(passwordLbl, passwordInput);
 		}
 
+		
 		public string GetName()
 		{
 			return nameInput.Text.ToString();
@@ -65,8 +71,15 @@ namespace Progbase3
 			return passwordInput.Text.ToString();
 		}
 
+		private void UserSubmit()
+		{
+			this.canceled = false;
+			Application.RequestStop();
+		}
+
 		public void OnDialogCanceled()
 		{
+			canceled = true;
 			Application.RequestStop();
 		}
 	}

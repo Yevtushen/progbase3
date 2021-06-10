@@ -8,7 +8,6 @@ namespace Progbase3
 {
 	public class CustomersWindow : Window
 	{
-		private Window window;
 		protected CustomersRepository rep;
 		private Customer customer;
 		private TextField searchField;
@@ -118,7 +117,7 @@ namespace Progbase3
 				bool result = rep.Delete(customer.id);
 				if (result)
 				{
-					this.Remove(this.window);
+					Remove(this);
 				}
 				else
 				{

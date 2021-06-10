@@ -7,6 +7,7 @@ namespace Progbase3
 {
 	public class LogInDialog : Dialog
 	{
+		public bool canceled;
 		private TextField nameInput;
 		private TextField passwordInput;
 
@@ -15,6 +16,10 @@ namespace Progbase3
 			int rightColumnX = 20;
 			
 			this.Title = "Log In";
+
+			Button submitBtn = new Button("OK!");
+			submitBtn.Clicked += UserSubmit;
+			this.AddButton(submitBtn);
 
 			Button backBtn = new Button("Back");
 			backBtn.Clicked += OnDialogCanceled;
@@ -34,6 +39,7 @@ namespace Progbase3
 			{
 				X = rightColumnX,
 				Y = Pos.Top(passwordLbl),
+				Width = 40,
 				Secret = true
 			};
 			this.Add(passwordLbl, passwordInput);
@@ -49,8 +55,15 @@ namespace Progbase3
 			return passwordInput.Text.ToString();
 		}
 
+		private void UserSubmit()
+		{
+			this.canceled = false;
+			Application.RequestStop();
+		}
+
 		public void OnDialogCanceled()
 		{
+			canceled = true;
 			Application.RequestStop();
 		}
 	}

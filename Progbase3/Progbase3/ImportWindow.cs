@@ -6,14 +6,14 @@ using LibraryClass;
 
 namespace Progbase3
 {
-	class ImportWindow : Window
+	public class ImportWindow : Window
 	{
 		private ProductsRepository rep;
 		private Label targetFolderLbl;
 		private Label zipFileLbl;
 		private Label xmlFilePathLbl;
 
-		ImportWindow(ProductsRepository rep)
+		public ImportWindow(ProductsRepository rep)
 		{
 			this.rep = rep;
 
@@ -24,7 +24,7 @@ namespace Progbase3
 				Y = Pos.Top(targetBtn),
 				Width = Dim.Fill(),
 			};
-			targetBtn.Clicked += SelectDirectory;			
+			targetBtn.Clicked += SelectDirectory;
 			this.Add(targetBtn, targetFolderLbl);
 
 			Button zipBtn = new Button(2, 6, "Choose archive");
@@ -34,7 +34,7 @@ namespace Progbase3
 				Y = Pos.Top(zipBtn),
 				Width = Dim.Fill(),
 			};
-			zipBtn.Clicked += SelectFile;			
+			zipBtn.Clicked += SelectZipFile;			
 			this.Add(zipBtn, zipFileLbl);
 
 			Button xmlBtn = new Button(2, 8, "Choose xml");
@@ -44,7 +44,7 @@ namespace Progbase3
 				Y = Pos.Top(xmlBtn),
 				Width = Dim.Fill(),
 			};
-			xmlBtn.Clicked += SelectFile;
+			xmlBtn.Clicked += SelectXMLFile;
 			this.Add(xmlBtn, xmlFilePathLbl);
 
 			Button importBtn = new Button(2, 10, "Import");
@@ -59,7 +59,7 @@ namespace Progbase3
 
 		}
 
-		private void SelectFile(Label fileLbl)
+		private void SelectZipFile()
 		{
 			OpenDialog dialog = new OpenDialog("Open ZIP file", "Open?");
 			// dialog.DirectoryPath = ...
@@ -69,15 +69,33 @@ namespace Progbase3
 			if (!dialog.Canceled)
 			{
 				NStack.ustring filePath = dialog.FilePath;
-				fileLbl.Text = filePath;
+				zipFileLbl.Text = filePath;
 			}
 			else
 			{
-				fileLbl.Text = "Not selected";
+				zipFileLbl.Text = "Not selected";
 			}
 		}
 
-		private void SelectDirectory(Label dirLbl)
+		private void SelectXMLFile()
+		{
+			OpenDialog dialog = new OpenDialog("Open XML file", "Open?");
+			// dialog.DirectoryPath = ...
+
+			Application.Run(dialog);
+
+			if (!dialog.Canceled)
+			{
+				NStack.ustring filePath = dialog.FilePath;
+				xmlFilePathLbl.Text = filePath;
+			}
+			else
+			{
+				xmlFilePathLbl.Text = "Not selected";
+			}
+		}
+
+		private void SelectDirectory()
 		{
 			OpenDialog dialog = new OpenDialog("Open directory", "Open?");
 			dialog.CanChooseDirectories = true;
@@ -88,11 +106,11 @@ namespace Progbase3
 			if (!dialog.Canceled)
 			{
 				NStack.ustring filePath = dialog.FilePath;
-				dirLbl.Text = filePath;
+				targetFolderLbl.Text = filePath;
 			}
 			else
 			{
-				dirLbl.Text = "Not selected";
+				targetFolderLbl.Text = "Not selected";
 			}
 		}
 	}
