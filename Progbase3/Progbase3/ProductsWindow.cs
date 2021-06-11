@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Terminal.Gui;
 using LibraryClass;
+using System;
 
 namespace Progbase3
 {
 	public class ProductsWindow : Window
 	{
 
-		protected ProductsRepository rep;
-		private Customer c;
+		protected ProductsRepository productsRepository;
+		private Customer customers;
 		protected Order order;
 		private TextField searchField;
 		private string filterValue = "";
@@ -22,9 +21,19 @@ namespace Progbase3
 		private int pageSize = 5;
 		private int pageNumber = 1;
 
-		public ProductsWindow(Customer c)
+		public ProductsWindow(Customer customer, ProductsRepository productsRepository)
 		{
-			this.c = c;
+			this.customers = customer;
+			this.productsRepository = productsRepository;
+
+			this.Title = "Store";
+
+			MenuBar menu = new MenuBar(new MenuBarItem[]
+				{ new MenuBarItem("_File", new MenuItem[]
+					{ new MenuItem("_Import", "Import", OnImport), new MenuItem("_Export", "Export", OnExport), new MenuItem("_Exit", "Exit program", OnExit) }),
+				new MenuBarItem("_Help", new MenuItem[]
+				{ new MenuItem("_About", "About program", OnTellAbout) })});
+			this.Add(menu);
 
 			searchField = new TextField(2, 1, 20, "");
 			searchField.KeyPress += OnSearchPress;
@@ -73,7 +82,7 @@ namespace Progbase3
 			nextPageBtn.Clicked += OnNextPage;
 			this.Add(nextPageBtn);
 
-			if (c.moderator)
+			if (customer.moderator)
 			{
 				Button createNewBtn = new Button(2, 4, "Add new");
 				createNewBtn.Clicked += OnCreateButtonClicked;
@@ -103,6 +112,12 @@ namespace Progbase3
 			this.Add(frameView);
 		}
 
+		internal void SetRepository(ProductsRepository productsRepository)
+		{
+			this.productsRepository = productsRepository;
+			this.ShowCurrentPage();
+		}
+
 		private void CloseWin()
 		{
 			Remove(this);
@@ -129,9 +144,9 @@ namespace Progbase3
 			if (!dialog.canceled)
 			{
 				Product p = dialog.GetProduct();
-				long activid = rep.Insert(p);
+				long activid = productsRepository.Insert(p);
 				p.id = activid;
-				allProductsListView.SetSource(rep.GetSearchPage(filterValue, pageNumber, pageSize));
+				allProductsListView.SetSource(productsRepository.GetSearchPage(filterValue, pageNumber, pageSize));
 			}
 		}
 
@@ -148,7 +163,7 @@ namespace Progbase3
 
 		private void OnNextPage()
 		{
-			int totalPages = rep.GetSearchPagesCount(pageSize, filterValue);
+			int totalPages = productsRepository.GetSearchPagesCount(pageSize, filterValue);
 			if (pageNumber >= totalPages)
 			{
 				return;
@@ -161,33 +176,33 @@ namespace Progbase3
 		private void ShowCurrentPage()
 		{
 			this.pageLabel.Text = pageNumber.ToString();
-			this.totalPagesLabel.Text = rep.GetSearchPagesCount(pageSize, filterValue).ToString();
-			this.allProductsListView.SetSource(rep.GetSearchPage(filterValue, pageNumber, pageSize));
+			this.totalPagesLabel.Text = productsRepository.GetSearchPagesCount(pageSize, filterValue).ToString();
+			this.allProductsListView.SetSource(productsRepository.GetSearchPage(filterValue, pageNumber, pageSize));
 		}
 
 		private void OnOpenProduct(ListViewItemEventArgs args)
 		{
-			Product p = (Product)args.Value;
-			OpenProductDialog dialog = new OpenProductDialog(c, order);
-			dialog.SetProduct(p);
+			Product product = (Product)args.Value;
+			OpenProductDialog dialog = new OpenProductDialog(customers, order);
+			dialog.SetProduct(product);
 			Application.Run(dialog);
 			if (dialog.inOrder.Checked)
 			{
-				order.products.Add(p);
+				order.products.Add(product);
 			}
 			if (dialog.deleted)
 			{
-				bool result = rep.Delete(c.id);
+				bool result = productsRepository.Delete(customers.id);
 				if (result)
 				{
-					int pages = rep.GetTotalPages(pageSize);
+					int pages = productsRepository.GetTotalPages(pageSize);
 					if (pageNumber > pages && pageNumber > 1)
 					{
 						pageNumber -= 1;
 						this.ShowCurrentPage();
 					}
 
-					allProductsListView.SetSource(rep.GetPage(pageNumber, pageSize));
+					allProductsListView.SetSource(productsRepository.GetPage(pageNumber, pageSize));
 				}
 				else
 				{
@@ -196,16 +211,40 @@ namespace Progbase3
 			}
 			else if (dialog.updated)
 			{
-				bool result = rep.Update(c.id, dialog.GetProduct());
+				bool result = productsRepository.Update(customers.id, dialog.GetProduct());
 				if (result)
 				{
-					allProductsListView.SetSource(rep.GetPage(pageNumber, pageSize));
+					allProductsListView.SetSource(productsRepository.GetPage(pageNumber, pageSize));
 				}
 				else
 				{
 					MessageBox.ErrorQuery("Edit product", "Not able to edit the product", "OK");
 				}
 			}
+		}
+
+		private void OnExport()
+		{
+			ExportWindow win = new ExportWindow(productsRepository);
+
+			Application.Run(win);
+		}
+
+		private void OnImport()
+		{
+			ImportWindow win = new ImportWindow(productsRepository);
+
+			Application.Run(win);
+		}
+
+		private void OnExit()
+		{
+			Application.RequestStop();
+		}
+
+		private void OnTellAbout()
+		{
+			MessageBox.Query("About", "This is program presentation of an e-store done by KP-03 student, Yevtushenko Victoria, as a course project", "OK");
 		}
 	}
 }

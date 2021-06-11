@@ -64,15 +64,22 @@ namespace LibraryClass
             return newId;
         }
 
-        public int Delete(int id)
+        public bool Delete(long id)
 		{
             connection.Open();
             SqliteCommand command = connection.CreateCommand();
             command.CommandText = @"DELETE FROM orders WHERE id = $id";
             command.Parameters.AddWithValue("$id", id);
-            int nChanged = command.ExecuteNonQuery();
+            long nChanged = command.ExecuteNonQuery();
             connection.Close();
-            return nChanged;
+            if (nChanged == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         public List<Order> GetCustomersOrders(long customer_id)
@@ -92,42 +99,22 @@ namespace LibraryClass
             return orders;
         }
 
-        public List<Product> GetProductsInOrder(long customer_id)
-		{
-            List<Product> products = new List<Product>();
+        public List<Order> GetOrdersOfProduct(long productId)
+        {
+            List<Order> orders = new List<Order>();
             connection.Open();
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = @"SELECT * FROM products CROSS JOIN product_to_order WHERE products.id = product_to_order.product_id AND product_to_order.order_id = $customer_id";
-            command.Parameters.AddWithValue("$customer_id", customer_id);
+            command.CommandText = @"SELECT orders.* FROM orders CROSS JOIN product_to_order WHERE orders.id = product_to_order.order_id AND product_to_order.product_id = $product_id";
+            command.Parameters.AddWithValue("$product_id", productId);
             SqliteDataReader reader = command.ExecuteReader();
             while (reader.Read())
-			{
-                products.Add(ProductsRepository.GetProduct(reader));
-			}
+            {
+                orders.Add(GetOrder(reader));
+            }
             reader.Close();
-            return products;
-        }
-
-        /*public bool Update(long id, Order o)
-		{
-            connection.Open();
-            SqliteCommand command = connection.CreateCommand();
-            command.CommandText = @"UPDATE orders SET type = $type, name = $name, comment = $comment WHERE id = $id";
-            command.Parameters.AddWithValue("$type", a.type);
-            command.Parameters.AddWithValue("$name", a.name);
-            command.Parameters.AddWithValue("$comment", a.comment);
-            command.Parameters.AddWithValue("$id", id);
-            int nChanged = command.ExecuteNonQuery();
             connection.Close();
-            if (nChanged == 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-		}*/
+            return orders;
+        }
 
         private long GetCount(long customer_id)
         {
@@ -154,6 +141,22 @@ namespace LibraryClass
             command.Parameters.AddWithValue("$customer_id", customer_id);
             command.Parameters.AddWithValue("$pageSize", pageSize);
             command.Parameters.AddWithValue("$pageNumberEnd", pageEnd);
+            SqliteDataReader reader = command.ExecuteReader();
+            List<Order> orders = new List<Order>();
+            while (reader.Read())
+            {
+                orders.Add(GetOrder(reader));
+            }
+            reader.Close();
+            connection.Close();
+            return orders;
+        }
+
+        public List<Order> GetProducts()
+        {
+            connection.Open();
+            SqliteCommand command = connection.CreateCommand();
+            command.CommandText = @"SELECT * FROM orders";
             SqliteDataReader reader = command.ExecuteReader();
             List<Order> orders = new List<Order>();
             while (reader.Read())

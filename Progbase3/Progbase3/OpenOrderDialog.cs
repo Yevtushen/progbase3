@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Terminal.Gui;
 using LibraryClass;
 
@@ -9,8 +7,7 @@ namespace Progbase3
 	public class OpenOrderDialog : Dialog
 	{
 		public bool deleted;
-		public bool updated;
-		protected Order order;
+		private Order order;
 		private TextField idInput;
 		private TextView productsInput;
 
@@ -55,7 +52,11 @@ namespace Progbase3
 			int index = MessageBox.Query("Delete order", "Are you sure?", "No", "Yes");
 			if (index == 1)
 			{
-				this.deleted = true;
+				deleted = true;
+				foreach (var p in order.products)
+				{
+					p.left ++;
+				}
 				Application.RequestStop();
 			}
 		}
@@ -79,6 +80,7 @@ namespace Progbase3
 
 		private void OnOpenDialogCanceled()
 		{
+
 			Application.RequestStop();
 		}
 	}

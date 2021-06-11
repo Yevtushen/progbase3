@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Terminal.Gui;
 using Microsoft.Data.Sqlite;
 using LibraryClass;
@@ -14,6 +12,7 @@ namespace Progbase3
 		private ProductsRepository productsRepository;
 		private OrdersRepository ordersRepository;
 		private Window window;
+		private Toplevel top = new Toplevel();
 
 		public UserInterface(SqliteConnection connection)
 		{
@@ -43,9 +42,6 @@ namespace Progbase3
 			};
 			registerBtn.Clicked += RegisterClicked;
 			this.Add(logInBtn, registerBtn);
-
-			/*
-			}*/
 		}
 
 		private void CreateReport()
@@ -55,19 +51,25 @@ namespace Progbase3
 
 		private void ShowUsers()
 		{
-			CustomersWindow win = new CustomersWindow(customer);
+			CustomersWindow win = new CustomersWindow(customer, customersRepository);
+			win.SetRepository(customersRepository);
+			top.Add(win);
 			Application.Run(win);
 		}
 
 		private void ShowOrders()
 		{
-			OrdersWindow win = new OrdersWindow(customer);
+			OrdersWindow win = new OrdersWindow(customer, ordersRepository, productsRepository);
+			win.SetRepository(ordersRepository);
+			top.Add(win);
 			Application.Run(win);
 		}
 
 		private void ShowProducts()
 		{
-			ProductsWindow win = new ProductsWindow(customer);
+			ProductsWindow win = new ProductsWindow(customer, productsRepository);
+			win.SetRepository(productsRepository);
+			top.Add(win);
 			Application.Run(win);
 		}
 

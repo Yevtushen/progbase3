@@ -250,5 +250,51 @@ namespace LibraryClass
             connection.Close();
             return page;
         }
+
+        public List<Product> GetProductsInOrder(long orderId)
+        {
+            List<Product> orders = new List<Product>();
+            connection.Open();
+            SqliteCommand command = connection.CreateCommand();
+            command.CommandText = @"SELECT products.* FROM products CROSS JOIN product_to_order WHERE products.id = product_to_order.product_id AND product_to_order.order_id = $order_id";
+            command.Parameters.AddWithValue("$order_id", orderId);
+            SqliteDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                orders.Add(GetProduct(reader));
+            }
+            reader.Close();
+            connection.Close();
+            return orders;
+        }
+
+
+        public Dictionary<long, List<Product>> GetProductsInOrders()
+        {
+            Dictionary<long, List<Product>> productsInOrders = new Dictionary<long, List<Product>>();
+            connection.Open();
+            SqliteCommand command = connection.CreateCommand();
+            command.CommandText = @"SELECT product_to_order.order_id, products.* FROM products JOIN product_to_order ON products.id = product_to_order.product_id";
+            SqliteDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                var orderId = (long)reader["order_id"];
+                if (productsInOrders.ContainsKey(orderId))
+                {
+                    List<Product> products = productsInOrders[orderId];
+                    products.Add(GetProduct(reader));
+                }
+                else
+                {
+                    List<Product> products = new List<Product>();
+                    products.Add(GetProduct(reader));
+                    productsInOrders.Add(orderId, products);
+                }
+            }
+            reader.Close();
+            connection.Close();
+            return productsInOrders;
+        }
+
     }
 }

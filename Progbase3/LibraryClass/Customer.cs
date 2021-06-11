@@ -33,7 +33,7 @@ namespace LibraryClass
 
 		public override string ToString()
 		{
-			return $"#{id} {name}s adress is {adress}.";
+			return $"#{id} {name}";
 		}
 	}
 }

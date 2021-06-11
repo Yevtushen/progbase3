@@ -8,11 +8,11 @@ namespace Progbase3
 {
 	public class CustomersWindow : Window
 	{
-		protected CustomersRepository rep;
+		protected CustomersRepository customersRepository;
 		private Customer customer;
 		private TextField searchField;
 		private string filterValue = "";
-		protected ListView allCustomersListView;
+		private ListView allCustomersListView;
 		private Button prevPageBtn;
 		private Button nextPageBtn;
 		private Label pageLabel;
@@ -20,9 +20,19 @@ namespace Progbase3
 		private int pageSize = 5;
 		private int pageNumber = 1;
 
-		public CustomersWindow(Customer customer)
+		public CustomersWindow(Customer customer, CustomersRepository customersRepository)
 		{
 			this.customer = customer;
+			this.customersRepository = customersRepository;
+
+			this.Title = "Customer";
+
+			MenuBar menu = new MenuBar(new MenuBarItem[]
+				{ new MenuBarItem("_File", new MenuItem[]
+				{ new MenuItem("_Exit", "Exit program", OnExit) }),
+				new MenuBarItem("_Help", new MenuItem[]
+				{ new MenuItem("_About", "About program", OnTellAbout) })});
+			this.Add(menu);
 
 			Button yourselfBtn = new Button(2, 4, "Your info");
 			yourselfBtn.Clicked += OnYouOpen;			
@@ -93,6 +103,12 @@ namespace Progbase3
 			}
 		}
 
+		internal void SetRepository(CustomersRepository customersRepository)
+		{
+			this.customersRepository = customersRepository;
+			this.ShowCurrentPage();
+		}
+
 		private void CloseWin()
 		{
 			Remove(this);
@@ -114,7 +130,7 @@ namespace Progbase3
 			Application.Run(dialog);
 			if (dialog.deleted)
 			{
-				bool result = rep.Delete(customer.id);
+				bool result = customersRepository.Delete(customer.id);
 				if (result)
 				{
 					Remove(this);
@@ -126,7 +142,7 @@ namespace Progbase3
 			}
 			else if (dialog.updated)
 			{
-				bool result = rep.Update(customer.id, dialog.GetCustomer());
+				bool result = customersRepository.Update(customer.id, dialog.GetCustomer());
 				if (!result)
 				{
 					MessageBox.ErrorQuery("Edit customer", "Not able to edit the customer", "OK");
@@ -147,7 +163,7 @@ namespace Progbase3
 
 		private void OnNextPage()
 		{
-			int totalPages = rep.GetTotalPages(pageSize);
+			int totalPages = customersRepository.GetTotalPages(pageSize);
 			if (pageNumber >= totalPages)
 			{
 				return;
@@ -160,29 +176,29 @@ namespace Progbase3
 		private void ShowCurrentPage()
 		{
 			this.pageLabel.Text = pageNumber.ToString();
-			this.totalPagesLabel.Text = rep.GetSearchPagesCount(pageSize, filterValue).ToString();
-			this.allCustomersListView.SetSource(rep.GetSearchPage(filterValue, pageNumber, pageSize));
+			this.totalPagesLabel.Text = customersRepository.GetSearchPagesCount(pageSize, filterValue).ToString();
+			this.allCustomersListView.SetSource(customersRepository.GetSearchPage(filterValue, pageNumber, pageSize));
 		}
 
 		private void OnOpenCustomer(ListViewItemEventArgs args)
 		{
-			Customer c = (Customer)args.Value;
-			OpenCustomerDialog dialog = new OpenCustomerDialog(c);
-			dialog.SetCustomer(c);
+			Customer customer = (Customer)args.Value;
+			OpenCustomerDialog dialog = new OpenCustomerDialog(customer);
+			dialog.SetCustomer(customer);
 			Application.Run(dialog);
 			if (dialog.deleted)
 			{
-				bool result = rep.Delete(c.id);
+				bool result = customersRepository.Delete(customer.id);
 				if (result)
 				{
-					int pages = rep.GetSearchPagesCount(pageSize, filterValue);
+					int pages = customersRepository.GetSearchPagesCount(pageSize, filterValue);
 					if (pageNumber > pages && pageNumber > 1)
 					{
 						pageNumber -= 1;
 						this.ShowCurrentPage();
 					}
 
-					allCustomersListView.SetSource(rep.GetPage(pageNumber, pageSize));
+					allCustomersListView.SetSource(customersRepository.GetPage(pageNumber, pageSize));
 				}
 				else
 				{
@@ -191,16 +207,26 @@ namespace Progbase3
 			}
 			else if (dialog.updated)
 			{
-				bool result = rep.Update(c.id, dialog.GetCustomer());
+				bool result = customersRepository.Update(customer.id, dialog.GetCustomer());
 				if (result)
 				{
-					allCustomersListView.SetSource(rep.GetPage(pageNumber, pageSize));
+					allCustomersListView.SetSource(customersRepository.GetPage(pageNumber, pageSize));
 				}
 				else
 				{
 					MessageBox.ErrorQuery("Edit customer", "Not able to edit the customer", "OK");
 				}
 			}
+		}
+
+		private void OnExit()
+		{
+			Application.RequestStop();
+		}
+
+		private void OnTellAbout()
+		{
+			MessageBox.Query("About", "This is program presentation of an e-store done by KP-03 student, Yevtushenko Victoria, as a course project", "OK");
 		}
 	}
 }
