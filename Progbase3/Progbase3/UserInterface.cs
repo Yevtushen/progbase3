@@ -13,6 +13,7 @@ namespace Progbase3
 		private OrdersRepository ordersRepository;
 		private Window window;
 		private Toplevel top = new Toplevel();
+		private MenuBar menu;
 
 		public UserInterface(SqliteConnection connection)
 		{
@@ -22,12 +23,12 @@ namespace Progbase3
 
 			this.Title = "Authentication";
 
-			MenuBar menu = new MenuBar(new MenuBarItem[]
+			 menu = new MenuBar(new MenuBarItem[]
 				{ new MenuBarItem("_File", new MenuItem[]
 					{ new MenuItem("_Import", "Import", OnImport), new MenuItem("_Export", "Export", OnExport), new MenuItem("_Exit", "Exit program", OnExit) }),
 				new MenuBarItem("_Help", new MenuItem[]
 				{ new MenuItem("_About", "About program", OnTellAbout) })});
-			this.Add(menu);
+			Add(menu);
 
 			Button logInBtn = new Button("Log In")
 			{ 
@@ -41,12 +42,18 @@ namespace Progbase3
 				Y = Pos.Center() + 2
 			};
 			registerBtn.Clicked += RegisterClicked;
-			this.Add(logInBtn, registerBtn);
+			Add(logInBtn, registerBtn);
 		}
 
 		private void CreateReport()
 		{
-			throw new NotImplementedException();
+			ReportWindow win = new ReportWindow(productsRepository);
+			top.Add(win);
+			Application.Run(win);
+			if (win.closed == true)
+			{
+				top.Remove(win);
+			}
 		}
 
 		private void ShowUsers()
@@ -54,6 +61,10 @@ namespace Progbase3
 			CustomersWindow win = new CustomersWindow(customer, customersRepository);
 			win.SetRepository(customersRepository);
 			top.Add(win);
+			if (win.closed == true)
+			{
+				top.Remove(win);
+			}
 			Application.Run(win);
 		}
 
@@ -62,32 +73,43 @@ namespace Progbase3
 			OrdersWindow win = new OrdersWindow(customer, ordersRepository, productsRepository);
 			win.SetRepository(ordersRepository);
 			top.Add(win);
+			if (win.closed == true)
+			{
+				top.Remove(win);
+			}
 			Application.Run(win);
 		}
 
 		private void ShowProducts()
 		{
-			ProductsWindow win = new ProductsWindow(customer, productsRepository);
+			ProductsWindow win = new ProductsWindow(customer, productsRepository, ordersRepository);
 			win.SetRepository(productsRepository);
 			top.Add(win);
 			Application.Run(win);
+			if (win.closed == true)
+			{
+				top.Remove(win);
+			}
 		}
 
 		private void CloseNewWin()
 		{
-			this.Remove(this);
+			top.Remove(this);
 		}
 
 		private void MainWindow()
 		{
 			Rect frame = new Rect(0, 0, this.Frame.Width, this.Frame.Height);
 			window = new Window(frame, $"Hello, {customer.name}!");
-			this.Add(window);
+			top.Add(window);
+			Application.Run(window);
+
+			Add(menu);
 
 			Button backBtn = new Button("Log out")
 			{
 				X = Pos.Center(),
-				Y = Pos.Center() - 2
+				Y = Pos.Center() + 2
 			};
 			backBtn.Clicked += CloseNewWin;
 			this.Add(backBtn);
@@ -95,9 +117,10 @@ namespace Progbase3
 			Button productsBtn = new Button("Go to the store")
 			{
 				X = Pos.Center(),
-				Y = Pos.Center() + 2
+				Y = Pos.Center() + 1
 			};
 			productsBtn.Clicked += ShowProducts;
+			Add(productsBtn);
 
 			Button ordersBtn = new Button("See your orders")
 			{
@@ -105,25 +128,25 @@ namespace Progbase3
 				Y = Pos.Center()
 			};
 			ordersBtn.Clicked += ShowOrders;
+			Add(ordersBtn);
 
-			this.Add(productsBtn, ordersBtn);
 			if (customer.moderator == true)
 			{
 				Button usersBtn = new Button("Look at customers")
 				{
 					X = Pos.Center(),
-					Y = Pos.Center() - 2
+					Y = Pos.Center() - 1
 				};
 				usersBtn.Clicked += ShowUsers;
-				this.Add(usersBtn);
+				Add(usersBtn);
 
 				Button reportBtn = new Button("Create report")
 				{
 					X = Pos.Center(),
-					Y = Pos.Center() - 3
+					Y = Pos.Center() - 2
 				};
 				reportBtn.Clicked += CreateReport;
-				this.Add(reportBtn);
+				Add(reportBtn);
 			}
 		}
 
@@ -171,15 +194,23 @@ namespace Progbase3
 		private void OnExport()
 		{
 			ExportWindow win = new ExportWindow(productsRepository);
-
+			top.Add(win);
 			Application.Run(win);
+			if (win.closed == true)
+			{
+				top.Remove(win);
+			}
 		}
 
 		private void OnImport()
 		{
 			ImportWindow win = new ImportWindow(productsRepository);
-
+			top.Add(win);
 			Application.Run(win);
+			if (win.closed == true)
+			{
+				top.Remove(win);
+			}
 		}
 
 		private void OnExit()

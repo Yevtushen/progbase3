@@ -8,15 +8,16 @@ namespace Progbase3
 {
 	public class ExportWindow : Window
 	{
-		private ProductsRepository rep;
+		private ProductsRepository productsRepository;
 		private Label sourceFolderLbl;
 		private Label zipFileLbl;
 		private Label xmlFilePathLbl;
 		private TextField value;
+		public bool closed;
 
-		public ExportWindow(ProductsRepository rep)
+		public ExportWindow(ProductsRepository productsRepository)
 		{
-			this.rep = rep;
+			this.productsRepository = productsRepository;
 			Button sourceBtn = new Button(2, 4, "Choose source folder");
 			sourceFolderLbl = new Label("Not selected")
 			{
@@ -59,13 +60,22 @@ namespace Progbase3
 			Button exportBtn = new Button(2, 10, "Import");
 			exportBtn.Clicked += ExportData;
 			this.Add(exportBtn);
+
+			Button backBtn = new Button(2, 2, "Back");
+			backBtn.Clicked += GoBack;
+			this.Add(backBtn);
+		}
+
+		private void GoBack()
+		{
+			closed = true;
 		}
 
 		private void ExportData()
 		{
 			Export export = new Export();
 
-			export.ExportProducts(rep, value.Text.ToString(), xmlFilePathLbl.Text.ToString(), sourceFolderLbl.Text.ToString(), zipFileLbl.Text.ToString());
+			export.ExportProducts(productsRepository, value.Text.ToString(), xmlFilePathLbl.Text.ToString(), sourceFolderLbl.Text.ToString(), zipFileLbl.Text.ToString());
 		}
 
 		private void SelectZipFile()

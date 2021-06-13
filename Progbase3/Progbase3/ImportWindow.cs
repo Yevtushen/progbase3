@@ -8,14 +8,15 @@ namespace Progbase3
 {
 	public class ImportWindow : Window
 	{
-		private ProductsRepository rep;
+		private ProductsRepository productsRepository;
 		private Label targetFolderLbl;
 		private Label zipFileLbl;
 		private Label xmlFilePathLbl;
+		public bool closed;
 
-		public ImportWindow(ProductsRepository rep)
+		public ImportWindow(ProductsRepository productsRepository)
 		{
-			this.rep = rep;
+			this.productsRepository = productsRepository;
 
 			Button targetBtn = new Button(2, 4, "Choose target folder");
 			targetFolderLbl = new Label("Not selected")
@@ -50,12 +51,21 @@ namespace Progbase3
 			Button importBtn = new Button(2, 10, "Import");
 			importBtn.Clicked += ImportData;
 			this.Add(importBtn);
+
+			Button backBtn = new Button(2, 2, "Back");
+			backBtn.Clicked += GoBack;
+			this.Add(backBtn);
+		}
+
+		private void GoBack()
+		{
+			closed = true;
 		}
 
 		private void ImportData()
 		{
 			Import import = new Import();
-			import.ImportProduct(rep, targetFolderLbl.Text.ToString(), zipFileLbl.Text.ToString(), xmlFilePathLbl.Text.ToString());
+			import.ImportProduct(productsRepository, targetFolderLbl.Text.ToString(), zipFileLbl.Text.ToString(), xmlFilePathLbl.Text.ToString());
 
 		}
 

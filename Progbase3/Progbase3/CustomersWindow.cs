@@ -19,7 +19,7 @@ namespace Progbase3
 		private Label totalPagesLabel;
 		private int pageSize = 5;
 		private int pageNumber = 1;
-
+		public bool closed;
 		public CustomersWindow(Customer customer, CustomersRepository customersRepository)
 		{
 			this.customer = customer;
@@ -133,7 +133,7 @@ namespace Progbase3
 				bool result = customersRepository.Delete(customer.id);
 				if (result)
 				{
-					Remove(this);
+					closed = true;
 				}
 				else
 				{

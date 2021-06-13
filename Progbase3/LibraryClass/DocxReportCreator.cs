@@ -32,6 +32,7 @@ namespace LibraryClass
 			var folderName = Path.Combine(destination, name);
 			document.Save(Path.Combine(folderName, "word\\document.xml"));
 			ZipFile.CreateFromDirectory(folderName, $"{folderName}.docx");
+			DeleteDirectory(folderName);
 		}
 
 		public string GetImageFileName()

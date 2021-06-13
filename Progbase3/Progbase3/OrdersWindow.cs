@@ -17,6 +17,7 @@ namespace Progbase3
 		private Label totalPagesLabel;
 		private int pageSize = 5;
 		private int pageNumber = 1;
+		public bool closed;
 
 		public OrdersWindow(Customer customer, OrdersRepository ordersRepository, ProductsRepository productsRepository)
 		{
@@ -28,7 +29,7 @@ namespace Progbase3
 
 			MenuBar menu = new MenuBar(new MenuBarItem[]
 				{ new MenuBarItem("_File", new MenuItem[]
-					{ new MenuItem("_Import", "Import", OnImport), new MenuItem("_Export", "Export", OnExport), new MenuItem("_Exit", "Exit program", OnExit) }),
+				{ new MenuItem("_Exit", "Exit program", OnExit) }),
 				new MenuBarItem("_Help", new MenuItem[]
 				{ new MenuItem("_About", "About program", OnTellAbout) })});
 			this.Add(menu);
@@ -98,13 +99,13 @@ namespace Progbase3
 
 		private void CloseWin()
 		{
-			Remove(this);
+			closed = true;
 		}
 
 		private void CreateOrder()
 		{
 			Toplevel top = new Toplevel();
-			ProductsWindow window = new ProductsWindow(customer, productsRepository);
+			ProductsWindow window = new ProductsWindow(customer, productsRepository, ordersRepository);
 			top.Add(window);
 		}
 
@@ -169,20 +170,6 @@ namespace Progbase3
 					MessageBox.ErrorQuery("Delete order", "Not able to delete the order", "OK");
 				}
 			}			
-		}
-
-		private void OnExport()
-		{
-			ExportWindow win = new ExportWindow(productsRepository);
-
-			Application.Run(win);
-		}
-
-		private void OnImport()
-		{
-			ImportWindow win = new ImportWindow(productsRepository);
-
-			Application.Run(win);
 		}
 
 		private void OnExit()

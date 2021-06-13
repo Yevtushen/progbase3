@@ -10,14 +10,12 @@ using System.Xml.Linq;
 namespace LibraryClass
 {
 	public class ReportCreator
-	{
+	{		
 		private ProductsRepository productsRepository;
-		private OrdersRepository ordersRepository;
 
-		public ReportCreator(ProductsRepository productsRepository, OrdersRepository ordersRepository)
+		public ReportCreator(ProductsRepository productsRepository)
 		{
 			this.productsRepository = productsRepository;
-			this.ordersRepository = ordersRepository;
 		}
 
 		public void SaveReport(string filePath)
@@ -29,6 +27,7 @@ namespace LibraryClass
 			ReplaceImage(docxReportCreator.GetImageFileName());
 
 			docxReportCreator.SaveDocx(xmlDocument);
+			
 		}
 
 		private void ReplaceImage(string filePath)
