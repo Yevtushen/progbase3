@@ -49,17 +49,22 @@ namespace LibraryClass
         public long Insert(Order o)
         {
             connection.Open();
+
+            
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText =
-            @"
-    INSERT INTO orders (id, customer_id) 
-    VALUES ($id, $customer_id);
- 
-    SELECT last_insert_rowid();
-";
-            command.Parameters.AddWithValue("$id", o.id);
-            command.Parameters.AddWithValue("$customer", o.customer_id);
+            command.CommandText = @"INSERT INTO orders (customer_id) VALUES ($customer_id); SELECT last_insert_rowid();";
+            command.Parameters.AddWithValue("$customer_id", o.customer_id);
             long newId = (long)command.ExecuteScalar();
+
+            for (int i = 0; i < o.products.Count; i++)
+			{
+                SqliteCommand command1 = connection.CreateCommand();
+                command1.CommandText = @"INSERT INTO product_to_order (product_id, customer) VALUES ($product_id, $order_id); SELECT last_insert_rowid();";
+                command1.Parameters.AddWithValue("$product_id", o.products[i].id);
+                command1.Parameters.AddWithValue("$order_id", o.id);
+                command1.ExecuteNonQuery();
+            }
+
             connection.Close();
             return newId;
         }
@@ -67,9 +72,16 @@ namespace LibraryClass
         public bool Delete(long id)
 		{
             connection.Open();
+
+            SqliteCommand command1 = connection.CreateCommand();
+            command1.CommandText = @"DELETE FROM product_to_order WHERE order_id = $id";
+            command1.Parameters.AddWithValue("$id", id);
+            command1.ExecuteNonQuery();
+
             SqliteCommand command = connection.CreateCommand();
             command.CommandText = @"DELETE FROM orders WHERE id = $id";
             command.Parameters.AddWithValue("$id", id);
+           
             long nChanged = command.ExecuteNonQuery();
             connection.Close();
             if (nChanged == 0)

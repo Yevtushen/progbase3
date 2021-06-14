@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.IO.Compression;
+﻿using System.Collections.Generic;
 using ScottPlot;
 using System.Linq;
 using System.Xml;

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Terminal.Gui;
 using LibraryClass;
-using System;
 
 namespace Progbase3
 {
@@ -102,15 +101,16 @@ namespace Progbase3
 				Height = pageSize + 2
 			};
 
-			Button submitOrderBtn = new Button(2, 2, "Submit your order");
-			if (order.products == null)
+			Button submitOrderBtn = new Button(2, 3, "Submit your order")
 			{
-				submitOrderBtn.Visible = false;
-			}
+				Visible = false
+			};
+			
 			submitOrderBtn.Clicked += OnSubmitOrder;
+			Add(submitOrderBtn);
 
 			Button backBtn = new Button(2, 15, "Back");
-			backBtn.Clicked += CloseWin;
+			backBtn.Clicked += CloseWindow;
 			Add(backBtn);
 
 			frameView.Add(allProductsListView);
@@ -123,7 +123,7 @@ namespace Progbase3
 			ShowCurrentPage();
 		}
 
-		private void CloseWin()
+		private void CloseWindow()
 		{			
 			closed = true;
 		}

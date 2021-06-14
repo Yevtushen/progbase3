@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Terminal.Gui;
+﻿using Terminal.Gui;
 using LibraryClass;
 
 namespace Progbase3
@@ -10,11 +7,11 @@ namespace Progbase3
 	{
 		public bool deleted;
 		public bool updated;
-		protected Customer customer;
-		protected TextField idInput;
-		protected TextField nameInput;
-		protected TextField adressInput;
-		protected CheckBox isModerator;
+		private Customer customer;
+		private TextField idInput;
+		private TextField nameInput;
+		private TextField adressInput;
+		private CheckBox isModerator;
 		private TextField passwordInput;
 
 		public OpenCustomerDialog(Customer customer)
@@ -101,7 +98,7 @@ namespace Progbase3
 		private void OnCustomerEdit()
 		{
 			EditCustomerDialog dialog = new EditCustomerDialog();
-			dialog.SetCustomer(this.customer);
+			dialog.SetCustomer(customer);
 			Application.Run(dialog);
 			if (!dialog.canceled)
 			{

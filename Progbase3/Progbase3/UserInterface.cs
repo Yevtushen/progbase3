@@ -1,5 +1,4 @@
-﻿using System;
-using Terminal.Gui;
+﻿using Terminal.Gui;
 using Microsoft.Data.Sqlite;
 using LibraryClass;
 
@@ -11,8 +10,7 @@ namespace Progbase3
 		private Customer customer;
 		private ProductsRepository productsRepository;
 		private OrdersRepository ordersRepository;
-		private Window window;
-		private Toplevel top = new Toplevel();
+		private Toplevel top = Application.Top;
 		private MenuBar menu;
 
 		public UserInterface(SqliteConnection connection)
@@ -49,10 +47,9 @@ namespace Progbase3
 		{
 			ReportWindow win = new ReportWindow(productsRepository);
 			top.Add(win);
-			Application.Run(win);
 			if (win.closed == true)
 			{
-				top.Remove(win);
+				top.RemoveAll();
 			}
 		}
 
@@ -63,7 +60,7 @@ namespace Progbase3
 			top.Add(win);
 			if (win.closed == true)
 			{
-				top.Remove(win);
+				top.RemoveAll();
 			}
 			Application.Run(win);
 		}
@@ -75,7 +72,7 @@ namespace Progbase3
 			top.Add(win);
 			if (win.closed == true)
 			{
-				top.Remove(win);
+				top.RemoveAll();
 			}
 			Application.Run(win);
 		}
@@ -88,22 +85,22 @@ namespace Progbase3
 			Application.Run(win);
 			if (win.closed == true)
 			{
-				top.Remove(win);
+				top.RemoveAll();
 			}
 		}
 
 		private void CloseNewWin()
 		{
-			top.Remove(this);
+			top.RemoveAll();
 		}
 
 		private void MainWindow()
 		{
-			Rect frame = new Rect(0, 0, this.Frame.Width, this.Frame.Height);
-			window = new Window(frame, $"Hello, {customer.name}!");
-			top.Add(window);
+			Rect frame = new Rect(0, 0, Frame.Width, Frame.Height);
+			Window win = new Window(frame, $"Hello, {customer.name}!");
+			top.Add(win);
 
-			Add(menu);
+			win.Add(menu);
 
 			Button backBtn = new Button("Log out")
 			{
@@ -111,7 +108,7 @@ namespace Progbase3
 				Y = Pos.Center() + 2
 			};
 			backBtn.Clicked += CloseNewWin;
-			Add(backBtn);
+			top.Add(backBtn);
 
 			Button productsBtn = new Button("Go to the store")
 			{
@@ -119,15 +116,15 @@ namespace Progbase3
 				Y = Pos.Center() + 1
 			};
 			productsBtn.Clicked += ShowProducts;
-			Add(productsBtn);
+			win.Add(productsBtn);
 
 			Button ordersBtn = new Button("See your orders")
 			{
 				X = Pos.Center(),
-				Y = Pos.Center()
+				Y = Pos.Center() + 0
 			};
 			ordersBtn.Clicked += ShowOrders;
-			Add(ordersBtn);
+			win.Add(ordersBtn);
 
 			if (customer.moderator == true)
 			{
@@ -137,7 +134,7 @@ namespace Progbase3
 					Y = Pos.Center() - 1
 				};
 				usersBtn.Clicked += ShowUsers;
-				Add(usersBtn);
+				win.Add(usersBtn);
 
 				Button reportBtn = new Button("Create report")
 				{
@@ -145,7 +142,8 @@ namespace Progbase3
 					Y = Pos.Center() - 2
 				};
 				reportBtn.Clicked += CreateReport;
-				Add(reportBtn);
+				win.Add(reportBtn);	
+				
 			}
 		}
 
@@ -197,7 +195,7 @@ namespace Progbase3
 			Application.Run(win);
 			if (win.closed == true)
 			{
-				top.Remove(win);
+				top.RemoveAll();
 			}
 		}
 
@@ -208,7 +206,7 @@ namespace Progbase3
 			Application.Run(win);
 			if (win.closed == true)
 			{
-				top.Remove(win);
+				top.RemoveAll();
 			}
 		}
 

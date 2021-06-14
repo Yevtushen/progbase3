@@ -91,14 +91,14 @@ namespace Progbase3
 			};
 
 			Button backBtn = new Button(2, 15, "Back");
-			backBtn.Clicked += CloseWin;
+			backBtn.Clicked += CloseWindow;
 			Add(backBtn);
 
 			frameView.Add(allOrdersListView);
 			Add(frameView);
 		}
 
-		private void CloseWin()
+		private void CloseWindow()
 		{
 			closed = true;
 		}

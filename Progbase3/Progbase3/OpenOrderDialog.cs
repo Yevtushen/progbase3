@@ -9,7 +9,7 @@ namespace Progbase3
 		public bool deleted;
 		private Order order;
 		private TextField idInput;
-		private TextView productsInput;
+		private TextField productsInput;
 
 		public OpenOrderDialog(Order order)
 		{
@@ -33,12 +33,11 @@ namespace Progbase3
 			Add(idLbl, idInput);
 
 			Label productsLbl = new Label(2, 4, "Products:");
-			productsInput = new TextView()
+			productsInput = new TextField("")
 			{
 				X = rightColumnX,
 				Y = Pos.Top(productsLbl),
 				Width = 40,
-				Text = "",
 				ReadOnly = true
 			};
 			Add(productsLbl, productsInput);

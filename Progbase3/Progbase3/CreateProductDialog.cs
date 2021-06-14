@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Terminal.Gui;
+﻿using Terminal.Gui;
 using LibraryClass;
 
 namespace Progbase3
@@ -12,7 +9,7 @@ namespace Progbase3
 		protected TextField nameInput;
 		protected TextField priceInput;
 		protected TextField leftInput;
-		protected TextView descriptionInput;
+		protected TextField descriptionInput;
 
 		public CreateProductDialog()
 		{
@@ -52,18 +49,17 @@ namespace Progbase3
 			{
 				X = rightColumnX,
 				Y = Pos.Top(leftLbl),
-				Width = 40,
+				Width = 60,
 				ReadOnly = true
 			};
 			Add(leftLbl, leftInput);
 
 			Label descriptionLbl = new Label(2, 10, "Description:");
-			descriptionInput = new TextView()
+			descriptionInput = new TextField("")
 			{
 				X = rightColumnX,
 				Y = Pos.Top(descriptionLbl),
 				Width = 40,
-				Text = "",
 				ReadOnly = true
 			};
 			Add(descriptionLbl, descriptionInput);

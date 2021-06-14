@@ -19,17 +19,18 @@ namespace Progbase3
 				Y = Pos.Center()
 			};
 			createReportBtn.Clicked += CreateReport;
-			this.Add(createReportBtn);
+			Add(createReportBtn);
 
 			Button backBtn = new Button("Back")
 			{
 				X = Pos.Center(),
 				Y = Pos.Center() + 2
 			};
-			backBtn.Clicked += GoBack;
+			backBtn.Clicked += CloseWindow;
+			Add(backBtn);
 		}
 
-		private void GoBack()
+		private void CloseWindow()
 		{
 			closed = true;
 		}
