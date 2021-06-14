@@ -163,7 +163,7 @@ namespace Progbase3
 				return;
 			}
 
-			this.pageNumber -= 1;
+			pageNumber -= 1;
 			ShowCurrentPage();
 		}
 
@@ -175,21 +175,21 @@ namespace Progbase3
 				return;
 			}
 
-			this.pageNumber += 1;
+			pageNumber += 1;
 			ShowCurrentPage();
 		}
 
 		private void ShowCurrentPage()
 		{
-			this.pageLabel.Text = pageNumber.ToString();
-			this.totalPagesLabel.Text = productsRepository.GetSearchPagesCount(pageSize, filterValue).ToString();
-			this.allProductsListView.SetSource(productsRepository.GetSearchPage(filterValue, pageNumber, pageSize));
+			pageLabel.Text = pageNumber.ToString();
+			totalPagesLabel.Text = productsRepository.GetSearchPagesCount(pageSize, filterValue).ToString();
+			allProductsListView.SetSource(productsRepository.GetSearchPage(filterValue, pageNumber, pageSize));
 		}
 
 		private void OnOpenProduct(ListViewItemEventArgs args)
 		{
 			Product product = (Product)args.Value;
-			OpenProductDialog dialog = new OpenProductDialog(customer, order);
+			OpenProductDialog dialog = new OpenProductDialog(product, customer, order);
 			dialog.SetProduct(product);
 			Application.Run(dialog);
 			if (dialog.inOrder.Checked)
@@ -205,7 +205,7 @@ namespace Progbase3
 					if (pageNumber > pages && pageNumber > 1)
 					{
 						pageNumber -= 1;
-						this.ShowCurrentPage();
+						ShowCurrentPage();
 					}
 
 					allProductsListView.SetSource(productsRepository.GetPage(pageNumber, pageSize));

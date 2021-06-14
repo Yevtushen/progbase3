@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Xml.Serialization;
@@ -9,7 +7,6 @@ namespace LibraryClass
 {
 	public class Import
 	{
-
 		public void ImportProduct(ProductsRepository rep, string targetFolder, string zipFile, string xmlFilePath)
 		{
 			ZipFile.ExtractToDirectory(zipFile, targetFolder);

@@ -20,14 +20,14 @@ namespace Progbase3
 
 		public EditCustomerDialog()
 		{
-			this.Title = "Edit customer";
+			Title = "Edit customer";
 		}
 
 		public void SetCustomer(Customer customer)
 		{
-			this.nameInput.Text = customer.name;
-			this.adressInput.Text = customer.adress;
-			this.isModerator.Text = customer.moderator.ToString();
+			nameInput.Text = customer.name;
+			adressInput.Text = customer.adress;
+			isModerator.Text = customer.moderator.ToString();
 		}
 
 		public Customer GetCustomer()

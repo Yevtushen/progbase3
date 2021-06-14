@@ -11,13 +11,14 @@ namespace Progbase3
 		private TextField idInput;
 		private TextView productsInput;
 
-		public OpenOrderDialog(Customer c)
+		public OpenOrderDialog(Order order)
 		{
-			this.Title = "Open order";
+			Title = "Open order";
+			this.order = order;
 
 			Button backBtn = new Button("Back");
 			backBtn.Clicked += OnOpenDialogCanceled;
-			this.AddButton(backBtn);
+			AddButton(backBtn);
 
 			int rightColumnX = 20;
 
@@ -29,7 +30,7 @@ namespace Progbase3
 				Width = 20,
 				ReadOnly = true
 			};
-			this.Add(idLbl, idInput);
+			Add(idLbl, idInput);
 
 			Label productsLbl = new Label(2, 4, "Products:");
 			productsInput = new TextView()
@@ -40,11 +41,11 @@ namespace Progbase3
 				Text = "",
 				ReadOnly = true
 			};
-			this.Add(productsLbl, productsInput);
+			Add(productsLbl, productsInput);
 
 			Button deleteBtn = new Button(2, 16, "Delete");
 			deleteBtn.Clicked += OnOrderDelete;
-			this.Add(deleteBtn);
+			Add(deleteBtn);
 		}
 
 		private void OnOrderDelete()
@@ -63,7 +64,7 @@ namespace Progbase3
 
 		public Order GetOrder()
 		{
-			return this.order;
+			return order;
 		}
 		
 		public void SetOrder (Order order)

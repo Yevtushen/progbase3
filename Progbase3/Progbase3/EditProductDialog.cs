@@ -6,15 +6,15 @@ namespace Progbase3
 	{
 		public EditProductDialog()
 		{
-			this.Title = "Edit product";
+			Title = "Edit product";
 		}
 
 		public void SetProduct(Product product)
 		{
-			this.nameInput.Text = product.name;
-			this.priceInput.Text = product.price.ToString();
-			this.leftInput.Text = product.left.ToString();
-			this.descriptionInput.Text = product.description;
+			nameInput.Text = product.name;
+			priceInput.Text = product.price.ToString();
+			leftInput.Text = product.left.ToString();
+			descriptionInput.Text = product.description;
 		}
 	}
 }

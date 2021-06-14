@@ -15,7 +15,7 @@ namespace LibraryClass
 
         public static Product GetProduct(SqliteDataReader reader)
         {
-            Product p = new Product()
+            Product product = new Product()
             {
                 id = long.Parse(reader.GetString(0)),
                 name = reader.GetString(1),
@@ -24,7 +24,7 @@ namespace LibraryClass
                 description = reader.GetString(4)
             };
 
-            return p;
+            return product;
         }
 
         public Product GetById(long id)
@@ -236,7 +236,7 @@ namespace LibraryClass
             SqliteCommand command = connection.CreateCommand();
             int pageEnd = pageSize * (pageNumber - 1);
             value = $"%{value}%";
-            command.CommandText = @"SELECT * FROM products LIMIT $pageSize OFFSET $pageNumberEnd WHERE name LIKE $value";
+            command.CommandText = @"SELECT * FROM products WHERE name LIKE $value LIMIT $pageSize OFFSET $pageNumberEnd";
             command.Parameters.AddWithValue("$pageSize", pageSize);
             command.Parameters.AddWithValue("$pageNumberEnd", pageEnd);
             command.Parameters.AddWithValue("$value", value);

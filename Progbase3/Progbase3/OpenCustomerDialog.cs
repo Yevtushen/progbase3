@@ -17,13 +17,15 @@ namespace Progbase3
 		protected CheckBox isModerator;
 		private TextField passwordInput;
 
-		public OpenCustomerDialog(Customer c)
+		public OpenCustomerDialog(Customer customer)
 		{
-			this.Title = "Open Customer";
+			this.customer = customer;
+
+			Title = "Open Customer";
 
 			Button backBtn = new Button("Back");
 			backBtn.Clicked += OnOpenDialogCanceled;
-			this.AddButton(backBtn);
+			AddButton(backBtn);
 
 			int rightColumnX = 20;
 
@@ -35,7 +37,7 @@ namespace Progbase3
 				Width = 20,
 				ReadOnly = true
 			};
-			this.Add(idLbl, idInput);
+			Add(idLbl, idInput);
 
 			Label nameLbl = new Label(2, 4, "Name:");
 			nameInput = new TextField("")
@@ -45,7 +47,7 @@ namespace Progbase3
 				Width = 40,
 				ReadOnly = true
 			};
-			this.Add(nameLbl, nameInput);
+			Add(nameLbl, nameInput);
 
 			Label adressLbl = new Label(2, 6, "Adress:");
 			adressInput = new TextField("")
@@ -55,11 +57,11 @@ namespace Progbase3
 				Width = 40,
 				ReadOnly = true
 			};
-			this.Add(adressLbl, adressInput);
+			Add(adressLbl, adressInput);
 
 			isModerator = new CheckBox(2, 10, "Is moderator");
 			isModerator.Visible = false;
-			this.Add(isModerator);
+			Add(isModerator);
 
 			Label passwordLbl = new Label(2, 8, "Your password");
 			passwordLbl.Visible = false;
@@ -71,11 +73,11 @@ namespace Progbase3
 				ReadOnly = true,
 				Visible = false
 			};
-			this.Add(passwordLbl, passwordInput);
+			Add(passwordLbl, passwordInput);
 
 			Button editBtn = new Button(2, 16, "Update");
 			editBtn.Clicked += OnCustomerEdit;
-			this.Add(editBtn);
+			Add(editBtn);
 
 			Button deleteBtn = new Button("Delete")
 			{
@@ -83,7 +85,7 @@ namespace Progbase3
 				Y = Pos.Top(editBtn)
 			};
 			deleteBtn.Clicked += OnCustomerDelete;
-			this.Add(deleteBtn);
+			Add(deleteBtn);
 		}
 
 		private void OnCustomerDelete()
@@ -91,7 +93,7 @@ namespace Progbase3
 			int index = MessageBox.Query("Delete customer", "Are you sure?", "No", "Yes");
 			if (index == 1)
 			{
-				this.deleted = true;
+				deleted = true;
 				Application.RequestStop();
 			}
 		}
@@ -112,8 +114,8 @@ namespace Progbase3
 					isModerator.Visible = true;
 				}
 				Customer updatedCustomer = dialog.GetCustomer();
-				this.updated = true;
-				this.SetCustomer(updatedCustomer);
+				updated = true;
+				SetCustomer(updatedCustomer);
 			}
 			nameInput.ReadOnly = true;
 			adressInput.ReadOnly = true;
@@ -130,15 +132,15 @@ namespace Progbase3
 		public void SetCustomer(Customer customer)
 		{
 			this.customer = customer;
-			this.idInput.Text = customer.id.ToString();
-			this.nameInput.Text = customer.name;
-			this.adressInput.Text = customer.adress;
+			idInput.Text = customer.id.ToString();
+			nameInput.Text = customer.name;
+			adressInput.Text = customer.adress;
 			
 		}
 
 		public Customer GetCustomer()
 		{
-			return this.customer;
+			return customer;
 		}
 	}
 }

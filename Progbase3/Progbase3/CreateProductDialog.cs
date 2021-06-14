@@ -16,14 +16,14 @@ namespace Progbase3
 
 		public CreateProductDialog()
 		{
-			this.Title = "Create product";
+			Title = "Create product";
 
 			Button okBtn = new Button("OK");
 			Button canselBtn = new Button("Cancel");
 			canselBtn.Clicked += OnCreateDialogCanceled;
 			okBtn.Clicked += OnCreateDialogSubmitted;
-			this.AddButton(canselBtn);
-			this.AddButton(okBtn);
+			AddButton(canselBtn);
+			AddButton(okBtn);
 
 			int rightColumnX = 20;
 
@@ -35,7 +35,7 @@ namespace Progbase3
 				Width = 40,
 				ReadOnly = true
 			};
-			this.Add(nameLbl, nameInput);
+			Add(nameLbl, nameInput);
 
 			Label priceLbl = new Label(2, 6, "Price:");
 			priceInput = new TextField("")
@@ -45,7 +45,7 @@ namespace Progbase3
 				Width = 40,
 				ReadOnly = true
 			};
-			this.Add(priceLbl, priceInput);
+			Add(priceLbl, priceInput);
 
 			Label leftLbl = new Label(2, 8, "Left:");
 			leftInput = new TextField("")
@@ -55,7 +55,7 @@ namespace Progbase3
 				Width = 40,
 				ReadOnly = true
 			};
-			this.Add(leftLbl, leftInput);
+			Add(leftLbl, leftInput);
 
 			Label descriptionLbl = new Label(2, 10, "Description:");
 			descriptionInput = new TextView()
@@ -66,7 +66,7 @@ namespace Progbase3
 				Text = "",
 				ReadOnly = true
 			};
-			this.Add(descriptionLbl, descriptionInput);
+			Add(descriptionLbl, descriptionInput);
 		}
 
 		public Product GetProduct()
@@ -83,13 +83,13 @@ namespace Progbase3
 
 		private void OnCreateDialogSubmitted()
 		{
-			this.canceled = false;
+			canceled = false;
 			Application.RequestStop();
 		}
 
 		private void OnCreateDialogCanceled()
 		{
-			this.canceled = true;
+			canceled = true;
 			Application.RequestStop();
 		}
 	}

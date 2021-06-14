@@ -16,15 +16,15 @@ namespace Progbase3
 		{
 			int rightColumnX = 20;
 
-			this.Title = "Registration";
+			Title = "Registration";
 
 			Button submitBtn = new Button("OK!");
 			submitBtn.Clicked += UserSubmit;
-			this.AddButton(submitBtn);
+			AddButton(submitBtn);
 
 			Button backBtn = new Button("Back");
 			backBtn.Clicked += OnDialogCanceled;
-			this.AddButton(backBtn);
+			AddButton(backBtn);
 
 			Label nameLbl = new Label(2, 2, "Enter your name:");
 			 nameInput = new TextField("")
@@ -33,7 +33,7 @@ namespace Progbase3
 				Y = Pos.Top(nameLbl),
 				Width = 40
 			};
-			this.Add(nameLbl, nameInput);
+			Add(nameLbl, nameInput);
 
 			Label adressLbl = new Label(2, 4, "Enter your adress:");
 			 adressInput = new TextField("")
@@ -42,7 +42,7 @@ namespace Progbase3
 				Y = Pos.Top(adressLbl),
 				Width = 40
 			};
-			this.Add(adressLbl, adressInput);
+			Add(adressLbl, adressInput);
 
 			Label passwordLbl = new Label(2, 6, "Enter your password");
 			passwordInput = new TextField("")
@@ -52,7 +52,7 @@ namespace Progbase3
 				Width = 40,
 				Secret = true
 			};
-			this.Add(passwordLbl, passwordInput);
+			Add(passwordLbl, passwordInput);
 		}
 
 		
@@ -73,7 +73,7 @@ namespace Progbase3
 
 		private void UserSubmit()
 		{
-			this.canceled = false;
+			canceled = false;
 			Application.RequestStop();
 		}
 

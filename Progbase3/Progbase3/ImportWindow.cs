@@ -26,7 +26,7 @@ namespace Progbase3
 				Width = Dim.Fill(),
 			};
 			targetBtn.Clicked += SelectDirectory;
-			this.Add(targetBtn, targetFolderLbl);
+			Add(targetBtn, targetFolderLbl);
 
 			Button zipBtn = new Button(2, 6, "Choose archive");
 			zipFileLbl = new Label("Not selected")
@@ -36,7 +36,7 @@ namespace Progbase3
 				Width = Dim.Fill(),
 			};
 			zipBtn.Clicked += SelectZipFile;			
-			this.Add(zipBtn, zipFileLbl);
+			Add(zipBtn, zipFileLbl);
 
 			Button xmlBtn = new Button(2, 8, "Choose xml");
 			xmlFilePathLbl = new Label("Not selected")
@@ -46,15 +46,15 @@ namespace Progbase3
 				Width = Dim.Fill(),
 			};
 			xmlBtn.Clicked += SelectXMLFile;
-			this.Add(xmlBtn, xmlFilePathLbl);
+			Add(xmlBtn, xmlFilePathLbl);
 
 			Button importBtn = new Button(2, 10, "Import");
 			importBtn.Clicked += ImportData;
-			this.Add(importBtn);
+			Add(importBtn);
 
 			Button backBtn = new Button(2, 2, "Back");
 			backBtn.Clicked += GoBack;
-			this.Add(backBtn);
+			Add(backBtn);
 		}
 
 		private void GoBack()

@@ -21,16 +21,7 @@ namespace LibraryClass
 			orders = new List<Order>();
 		}
 
-		public Customer(long id, string name, string adress, string password, bool moderator, List<Order> orders)
-		{
-			this.id = id;
-			this.name = name;
-			this.adress = adress;
-			this.password = password;
-			this.moderator = moderator;
-			this.orders = orders;
-		}
-
+		
 		public override string ToString()
 		{
 			return $"#{id} {name}";

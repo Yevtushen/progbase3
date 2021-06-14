@@ -15,7 +15,7 @@ namespace LibraryClass
 
         static Customer GetCustomer(SqliteDataReader reader)
         {
-            Customer c = new Customer()
+            Customer customer = new Customer()
             {
                 id = int.Parse(reader.GetString(0)),
                 name = reader.GetString(1),
@@ -23,7 +23,7 @@ namespace LibraryClass
                 password = reader.GetString(3),
                 moderator = Convert.ToBoolean(int.Parse(reader.GetString(4)))
             };
-            return c;
+            return customer;
         }
 
         public Customer GetById(int id)

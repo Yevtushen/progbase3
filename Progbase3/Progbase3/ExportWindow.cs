@@ -81,7 +81,7 @@ namespace Progbase3
 		private void SelectZipFile()
 		{
 			OpenDialog dialog = new OpenDialog("Open ZIP file", "Open?");
-			// dialog.DirectoryPath = ...
+			//dialog.DirectoryPath = 
 
 			Application.Run(dialog);
 

@@ -25,23 +25,24 @@ namespace Progbase3
 			this.customer = customer;
 			this.customersRepository = customersRepository;
 
-			this.Title = "Customer";
+			Title = "Customer";
 
 			MenuBar menu = new MenuBar(new MenuBarItem[]
 				{ new MenuBarItem("_File", new MenuItem[]
 				{ new MenuItem("_Exit", "Exit program", OnExit) }),
 				new MenuBarItem("_Help", new MenuItem[]
 				{ new MenuItem("_About", "About program", OnTellAbout) })});
-			this.Add(menu);
+			Add(menu);
 
 			Button yourselfBtn = new Button(2, 4, "Your info");
-			yourselfBtn.Clicked += OnYouOpen;			
+			yourselfBtn.Clicked += OnYouOpen;
+			Add(yourselfBtn);
 
 			if (customer.moderator)
 			{
 				searchField = new TextField(2, 1, 20, "");
 				searchField.KeyPress += OnSearchPress;
-				this.Add(searchField);
+				Add(searchField);
 
 				allCustomersListView = new ListView(new List<Customer>())
 				{
@@ -53,7 +54,7 @@ namespace Progbase3
 
 				prevPageBtn = new Button(2, 6, "Previous");
 				prevPageBtn.Clicked += OnPrevPage;
-				this.Add(prevPageBtn);
+				Add(prevPageBtn);
 
 				pageLabel = new Label("?")
 				{
@@ -61,7 +62,7 @@ namespace Progbase3
 					Y = Pos.Top(prevPageBtn),
 					Width = 5
 				};
-				this.Add(pageLabel);
+				Add(pageLabel);
 
 				Label pagesSeparatorLabel = new Label("/")
 				{
@@ -69,14 +70,15 @@ namespace Progbase3
 					Y = Pos.Top(prevPageBtn),
 					Width = 5
 				};
-				this.Add(pagesSeparatorLabel);
+				Add(pagesSeparatorLabel);
+
 				totalPagesLabel = new Label("?")
 				{
 					X = Pos.Right(pagesSeparatorLabel) + 1,
 					Y = Pos.Top(prevPageBtn),
 					Width = 5
 				};
-				this.Add(totalPagesLabel);
+				Add(totalPagesLabel);
 
 				nextPageBtn = new Button("Next")
 				{
@@ -84,7 +86,7 @@ namespace Progbase3
 					Y = Pos.Top(prevPageBtn),
 				};
 				nextPageBtn.Clicked += OnNextPage;
-				this.Add(nextPageBtn);
+				Add(nextPageBtn);
 
 				FrameView frameView = new FrameView("Customers")
 				{
@@ -96,17 +98,17 @@ namespace Progbase3
 
 				Button backBtn = new Button(2, 15, "Back");
 				backBtn.Clicked += CloseWin;
-				this.Add(backBtn);
+				Add(backBtn);
 
 				frameView.Add(allCustomersListView);
-				this.Add(frameView);
+				Add(frameView);
 			}
 		}
 
 		internal void SetRepository(CustomersRepository customersRepository)
 		{
 			this.customersRepository = customersRepository;
-			this.ShowCurrentPage();
+			ShowCurrentPage();
 		}
 
 		private void CloseWin()
@@ -157,7 +159,7 @@ namespace Progbase3
 				return;
 			}
 
-			this.pageNumber -= 1;
+			pageNumber -= 1;
 			ShowCurrentPage();
 		}
 
@@ -169,15 +171,15 @@ namespace Progbase3
 				return;
 			}
 
-			this.pageNumber += 1;
+			pageNumber += 1;
 			ShowCurrentPage();
 		}
 
 		private void ShowCurrentPage()
 		{
-			this.pageLabel.Text = pageNumber.ToString();
-			this.totalPagesLabel.Text = customersRepository.GetSearchPagesCount(pageSize, filterValue).ToString();
-			this.allCustomersListView.SetSource(customersRepository.GetSearchPage(filterValue, pageNumber, pageSize));
+			pageLabel.Text = pageNumber.ToString();
+			totalPagesLabel.Text = customersRepository.GetSearchPagesCount(pageSize, filterValue).ToString();
+			allCustomersListView.SetSource(customersRepository.GetSearchPage(filterValue, pageNumber, pageSize));
 		}
 
 		private void OnOpenCustomer(ListViewItemEventArgs args)
@@ -195,7 +197,7 @@ namespace Progbase3
 					if (pageNumber > pages && pageNumber > 1)
 					{
 						pageNumber -= 1;
-						this.ShowCurrentPage();
+						ShowCurrentPage();
 					}
 
 					allCustomersListView.SetSource(customersRepository.GetPage(pageNumber, pageSize));

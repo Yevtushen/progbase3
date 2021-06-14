@@ -25,18 +25,18 @@ namespace Progbase3
 			this.ordersRepository = ordersRepository;
 			this.productsRepository = productsRepository;
 
-			this.Title = "Your orders";
+			Title = "Your orders";
 
 			MenuBar menu = new MenuBar(new MenuBarItem[]
 				{ new MenuBarItem("_File", new MenuItem[]
 				{ new MenuItem("_Exit", "Exit program", OnExit) }),
 				new MenuBarItem("_Help", new MenuItem[]
 				{ new MenuItem("_About", "About program", OnTellAbout) })});
-			this.Add(menu);
+			Add(menu);
 
 			Button createBtn = new Button(2, 2, "Create new order");
 			createBtn.Clicked += CreateOrder;
-			this.Add(createBtn);
+			Add(createBtn);
 
 			allOrdersListView = new ListView(new List<Order>())
 			{
@@ -48,7 +48,7 @@ namespace Progbase3
 
 			prevPageBtn = new Button(2, 6, "Previous");
 			prevPageBtn.Clicked += OnPrevPage;
-			this.Add(prevPageBtn);
+			Add(prevPageBtn);
 
 			pageLabel = new Label("?")
 			{
@@ -56,7 +56,7 @@ namespace Progbase3
 				Y = Pos.Top(prevPageBtn),
 				Width = 5
 			};
-			this.Add(pageLabel);
+			Add(pageLabel);
 
 			Label pagesSeparatorLabel = new Label("/")
 			{
@@ -64,14 +64,15 @@ namespace Progbase3
 				Y = Pos.Top(prevPageBtn),
 				Width = 5
 			};
-			this.Add(pagesSeparatorLabel);
+			Add(pagesSeparatorLabel);
+
 			totalPagesLabel = new Label("?")
 			{
 				X = Pos.Right(pagesSeparatorLabel) + 1,
 				Y = Pos.Top(prevPageBtn),
 				Width = 5
 			};
-			this.Add(totalPagesLabel);
+			Add(totalPagesLabel);
 
 			nextPageBtn = new Button("Next")
 			{
@@ -79,7 +80,7 @@ namespace Progbase3
 				Y = Pos.Top(prevPageBtn),
 			};
 			nextPageBtn.Clicked += OnNextPage;
-			this.Add(nextPageBtn);
+			Add(nextPageBtn);
 
 			FrameView frameView = new FrameView("Orders")
 			{
@@ -91,10 +92,10 @@ namespace Progbase3
 
 			Button backBtn = new Button(2, 15, "Back");
 			backBtn.Clicked += CloseWin;
-			this.Add(backBtn);
+			Add(backBtn);
 
 			frameView.Add(allOrdersListView);
-			this.Add(frameView);
+			Add(frameView);
 		}
 
 		private void CloseWin()
@@ -107,6 +108,10 @@ namespace Progbase3
 			Toplevel top = new Toplevel();
 			ProductsWindow window = new ProductsWindow(customer, productsRepository, ordersRepository);
 			top.Add(window);
+			if (window.closed)
+			{
+				top.Remove(window);
+			}
 		}
 
 		private void OnPrevPage()
@@ -116,7 +121,7 @@ namespace Progbase3
 				return;
 			}
 
-			this.pageNumber -= 1;
+			pageNumber -= 1;
 			ShowCurrentPage();
 		}
 
@@ -128,27 +133,27 @@ namespace Progbase3
 				return;
 			}
 
-			this.pageNumber += 1;
+			pageNumber += 1;
 			ShowCurrentPage();
 		}
 
 		public void SetRepository(OrdersRepository ordersRepository)
 		{
 			this.ordersRepository = ordersRepository;
-			this.ShowCurrentPage();
+			ShowCurrentPage();
 		}
 
 		private void ShowCurrentPage()
 		{
-			this.pageLabel.Text = pageNumber.ToString();
-			this.totalPagesLabel.Text = ordersRepository.GetTotalPages(pageSize, customer.id).ToString();
-			this.allOrdersListView.SetSource(ordersRepository.GetPage(pageNumber, pageSize, customer.id));
+			pageLabel.Text = pageNumber.ToString();
+			totalPagesLabel.Text = ordersRepository.GetTotalPages(pageSize, customer.id).ToString();
+			allOrdersListView.SetSource(ordersRepository.GetPage(pageNumber, pageSize, customer.id));
 		}
 
 		private void OnOpenOrder(ListViewItemEventArgs args)
 		{
 			Order order = (Order)args.Value;
-			OpenOrderDialog dialog = new OpenOrderDialog(customer);
+			OpenOrderDialog dialog = new OpenOrderDialog(order);
 			dialog.SetOrder(order);
 			Application.Run(dialog);
 			if (dialog.deleted)

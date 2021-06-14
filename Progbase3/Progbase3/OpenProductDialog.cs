@@ -19,15 +19,16 @@ namespace Progbase3
 		public CheckBox inOrder;
 		private Order order;
 
-		public OpenProductDialog(Customer c, Order order)
+		public OpenProductDialog(Product product, Customer customer, Order order)
 		{
-			this.Title = "Open Product";
+			Title = "Open Product";
 
+			this.product = product;
 			this.order = order;
 
 			Button backBtn = new Button("Back");
 			backBtn.Clicked += OnOpenDialogCanceled;
-			this.AddButton(backBtn);
+			AddButton(backBtn);
 
 			int rightColumnX = 20;
 
@@ -39,7 +40,7 @@ namespace Progbase3
 				Width = 20,
 				ReadOnly = true
 			};
-			this.Add(idLbl, idInput);
+			Add(idLbl, idInput);
 
 			Label nameLbl = new Label(2, 4, "Name:");
 			nameInput = new TextField("")
@@ -49,7 +50,7 @@ namespace Progbase3
 				Width = 40,
 				ReadOnly = true
 			};
-			this.Add(nameLbl, nameInput);
+			Add(nameLbl, nameInput);
 
 			Label priceLbl = new Label(2, 6, "Price:");
 			priceInput = new TextField("")
@@ -59,7 +60,7 @@ namespace Progbase3
 				Width = 40,
 				ReadOnly = true
 			};
-			this.Add(priceLbl, priceInput);
+			Add(priceLbl, priceInput);
 
 			Label leftLbl = new Label(2, 8, "Left:");
 			leftInput = new TextField("")
@@ -69,7 +70,7 @@ namespace Progbase3
 				Width = 40,
 				ReadOnly = true
 			};
-			this.Add(leftLbl, leftInput);
+			Add(leftLbl, leftInput);
 
 			Label descriptionLbl = new Label(2, 10, "Description:");
 			descriptionInput = new TextView()
@@ -80,21 +81,21 @@ namespace Progbase3
 				Text = "",
 				ReadOnly = true
 			};
-			this.Add(descriptionLbl, descriptionInput);
+			Add(descriptionLbl, descriptionInput);
 
 			inOrder = new CheckBox(2, 12, "Put in order?") { Checked = false };
-			this.Add(inOrder);
+			Add(inOrder);
 
 			if (product.left <= 0)
 			{
 				inOrder.Visible = false;
 			}
 
-			if (c.moderator)
+			if (customer.moderator)
 			{
 				Button editBtn = new Button(2, 16, "Update");
 				editBtn.Clicked += OnProductEdit;
-				this.Add(editBtn);
+				Add(editBtn);
 
 				Button deleteBtn = new Button("Delete")
 				{
@@ -102,7 +103,7 @@ namespace Progbase3
 					Y = Pos.Top(editBtn)
 				};
 				deleteBtn.Clicked += OnProductDelete;
-				this.Add(deleteBtn);
+				Add(deleteBtn);
 			}
 		}
 
@@ -111,7 +112,7 @@ namespace Progbase3
 			int index = MessageBox.Query("Delete activity", "Are you sure?", "No", "Yes");
 			if (index == 1)
 			{
-				this.deleted = true;
+				deleted = true;
 				Application.RequestStop();
 			}
 		}
@@ -119,7 +120,7 @@ namespace Progbase3
 		private void OnProductEdit()
 		{
 			EditProductDialog dialog = new EditProductDialog();
-			dialog.SetProduct(this.product);
+			dialog.SetProduct(product);
 			Application.Run(dialog);
 			if (!dialog.canceled)
 			{
@@ -128,8 +129,8 @@ namespace Progbase3
 				leftInput.ReadOnly = false;
 				descriptionInput.ReadOnly = false;
 				Product updatedProduct = dialog.GetProduct();
-				this.updated = true;
-				this.SetProduct(updatedProduct);
+				updated = true;
+				SetProduct(updatedProduct);
 			}
 			nameInput.ReadOnly = true;
 			priceInput.ReadOnly = true;
@@ -140,13 +141,13 @@ namespace Progbase3
 		public void SetProduct(Product product)
 		{
 			this.product = product;
-			this.idInput.Text = product.id.ToString();
-			this.nameInput.Text = product.name;
-			this.priceInput.Text = product.price.ToString();
-			this.leftInput.Text = product.left.ToString();
-			this.descriptionInput.Text = product.description;
+			idInput.Text = product.id.ToString();
+			nameInput.Text = product.name;
+			priceInput.Text = product.price.ToString();
+			leftInput.Text = product.left.ToString();
+			descriptionInput.Text = product.description;
 
-			if (this.inOrder.Checked == true)
+			if (inOrder.Checked == true)
 			{
 				product.orders.Add(order);
 			}

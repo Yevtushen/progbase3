@@ -15,13 +15,13 @@ namespace LibraryClass
 
         public static Order GetOrder(SqliteDataReader reader)
         {
-            Order o = new Order()
+            Order order = new Order()
             {
                 id = long.Parse(reader.GetString(0)),
                 customer_id = long.Parse(reader.GetString(1)),
             };
 
-            return o;
+            return order;
         }
 
         public Order GetById(int id)

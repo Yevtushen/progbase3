@@ -17,11 +17,11 @@ namespace Progbase3
 
 		public UserInterface(SqliteConnection connection)
 		{
-			this.customersRepository = new CustomersRepository(connection);
-			this.productsRepository = new ProductsRepository(connection);
-			this.ordersRepository = new OrdersRepository(connection);
+			customersRepository = new CustomersRepository(connection);
+			productsRepository = new ProductsRepository(connection);
+			ordersRepository = new OrdersRepository(connection);
 
-			this.Title = "Authentication";
+			Title = "Authentication";
 
 			 menu = new MenuBar(new MenuBarItem[]
 				{ new MenuBarItem("_File", new MenuItem[]
@@ -102,7 +102,6 @@ namespace Progbase3
 			Rect frame = new Rect(0, 0, this.Frame.Width, this.Frame.Height);
 			window = new Window(frame, $"Hello, {customer.name}!");
 			top.Add(window);
-			Application.Run(window);
 
 			Add(menu);
 
@@ -112,7 +111,7 @@ namespace Progbase3
 				Y = Pos.Center() + 2
 			};
 			backBtn.Clicked += CloseNewWin;
-			this.Add(backBtn);
+			Add(backBtn);
 
 			Button productsBtn = new Button("Go to the store")
 			{
