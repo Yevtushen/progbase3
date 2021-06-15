@@ -12,6 +12,7 @@ namespace Progbase3
 		private OrdersRepository ordersRepository;
 		private Toplevel top = Application.Top;
 		private MenuBar menu;
+		private Window win;
 
 		public UserInterface(SqliteConnection connection)
 		{
@@ -34,6 +35,7 @@ namespace Progbase3
 				Y = Pos.Center() - 2
 			};
 			logInBtn.Clicked += LogInClicked;
+
 			Button registerBtn = new Button("Register")
 			{
 				X = Pos.Center(),
@@ -46,34 +48,20 @@ namespace Progbase3
 		private void CreateReport()
 		{
 			ReportWindow win = new ReportWindow(productsRepository);
-			top.Add(win);
-			if (win.closed == true)
-			{
-				top.RemoveAll();
-			}
+			Application.Run(win);
 		}
 
 		private void ShowUsers()
 		{
 			CustomersWindow win = new CustomersWindow(customer, customersRepository);
-			win.SetRepository(customersRepository);
-			top.Add(win);
-			if (win.closed == true)
-			{
-				top.RemoveAll();
-			}
+			win.SetRepository(customersRepository);			
 			Application.Run(win);
 		}
 
 		private void ShowOrders()
 		{
 			OrdersWindow win = new OrdersWindow(customer, ordersRepository, productsRepository);
-			win.SetRepository(ordersRepository);
-			top.Add(win);
-			if (win.closed == true)
-			{
-				top.RemoveAll();
-			}
+			win.SetRepository(ordersRepository);			
 			Application.Run(win);
 		}
 
@@ -81,23 +69,18 @@ namespace Progbase3
 		{
 			ProductsWindow win = new ProductsWindow(customer, productsRepository, ordersRepository);
 			win.SetRepository(productsRepository);
-			top.Add(win);
 			Application.Run(win);
-			if (win.closed == true)
-			{
-				top.RemoveAll();
-			}
 		}
 
 		private void CloseNewWin()
 		{
-			top.RemoveAll();
+			top.Remove(win);
 		}
 
 		private void MainWindow()
 		{
 			Rect frame = new Rect(0, 0, Frame.Width, Frame.Height);
-			Window win = new Window(frame, $"Hello, {customer.name}!");
+			win = new Window(frame, $"Hello, {customer.name}!");
 			top.Add(win);
 
 			win.Add(menu);
@@ -105,15 +88,15 @@ namespace Progbase3
 			Button backBtn = new Button("Log out")
 			{
 				X = Pos.Center(),
-				Y = Pos.Center() + 2
+				Y = Pos.Center() + 4
 			};
 			backBtn.Clicked += CloseNewWin;
-			top.Add(backBtn);
+			win.Add(backBtn);
 
 			Button productsBtn = new Button("Go to the store")
 			{
 				X = Pos.Center(),
-				Y = Pos.Center() + 1
+				Y = Pos.Center() - 2
 			};
 			productsBtn.Clicked += ShowProducts;
 			win.Add(productsBtn);
@@ -121,29 +104,28 @@ namespace Progbase3
 			Button ordersBtn = new Button("See your orders")
 			{
 				X = Pos.Center(),
-				Y = Pos.Center() + 0
+				Y = Pos.Center()
 			};
 			ordersBtn.Clicked += ShowOrders;
 			win.Add(ordersBtn);
 
+			Button usersBtn = new Button("Customer")
+			{
+				X = Pos.Center(),
+				Y = Pos.Center() + 2
+			};
+			usersBtn.Clicked += ShowUsers;
+			win.Add(usersBtn);
+
 			if (customer.moderator == true)
 			{
-				Button usersBtn = new Button("Look at customers")
-				{
-					X = Pos.Center(),
-					Y = Pos.Center() - 1
-				};
-				usersBtn.Clicked += ShowUsers;
-				win.Add(usersBtn);
-
 				Button reportBtn = new Button("Create report")
 				{
 					X = Pos.Center(),
-					Y = Pos.Center() - 2
+					Y = Pos.Center() - 4
 				};
 				reportBtn.Clicked += CreateReport;
-				win.Add(reportBtn);	
-				
+				win.Add(reportBtn);				
 			}
 		}
 
@@ -184,30 +166,19 @@ namespace Progbase3
 				{
 					MainWindow();
 				}
-			}
-			
+			}			
 		}
 
 		private void OnExport()
 		{
 			ExportWindow win = new ExportWindow(productsRepository);
-			top.Add(win);
 			Application.Run(win);
-			if (win.closed == true)
-			{
-				top.RemoveAll();
-			}
 		}
 
 		private void OnImport()
 		{
 			ImportWindow win = new ImportWindow(productsRepository);
-			top.Add(win);
 			Application.Run(win);
-			if (win.closed == true)
-			{
-				top.RemoveAll();
-			}
 		}
 
 		private void OnExit()

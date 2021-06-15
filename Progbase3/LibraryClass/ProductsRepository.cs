@@ -63,8 +63,8 @@ namespace LibraryClass
             for (int i = 0; i < p.orders.Count; i++)
 			{
                 SqliteCommand command1 = connection.CreateCommand();
-                command1.CommandText = @"INSERT INTO product_to_order (product_id, customer) VALUES ($product_id, $order_id); SELECT last_insert_rowid();";
-                command1.Parameters.AddWithValue("$product_id", p.id);
+                command1.CommandText = @"INSERT INTO product_to_order (product_id, order_id) VALUES ($product_id, $order_id); SELECT last_insert_rowid();";
+                command1.Parameters.AddWithValue("$product_id", newId);
                 command1.Parameters.AddWithValue("$order_id", p.orders[i].id);
                 command1.ExecuteNonQuery();
             }

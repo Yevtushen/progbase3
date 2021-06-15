@@ -17,7 +17,6 @@ namespace Progbase3
 		private Label totalPagesLabel;
 		private int pageSize = 5;
 		private int pageNumber = 1;
-		public bool closed;
 
 		public OrdersWindow(Customer customer, OrdersRepository ordersRepository, ProductsRepository productsRepository)
 		{
@@ -100,18 +99,15 @@ namespace Progbase3
 
 		private void CloseWindow()
 		{
-			closed = true;
+			Application.RequestStop();
 		}
 
 		private void CreateOrder()
-		{
-			Toplevel top = new Toplevel();
+		{			
 			ProductsWindow window = new ProductsWindow(customer, productsRepository, ordersRepository);
-			top.Add(window);
-			if (window.closed)
-			{
-				top.Remove(window);
-			}
+			window.SetRepository(productsRepository);
+			Application.Run(window);
+			ShowCurrentPage();
 		}
 
 		private void OnPrevPage()

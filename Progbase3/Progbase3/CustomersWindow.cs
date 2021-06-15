@@ -17,7 +17,7 @@ namespace Progbase3
 		private Label totalPagesLabel;
 		private int pageSize = 5;
 		private int pageNumber = 1;
-		public bool closed;
+
 		public CustomersWindow(Customer customer, CustomersRepository customersRepository)
 		{
 			this.customer = customer;
@@ -103,15 +103,19 @@ namespace Progbase3
 			}
 		}
 
-		internal void SetRepository(CustomersRepository customersRepository)
+		public void SetRepository(CustomersRepository customersRepository)
 		{
 			this.customersRepository = customersRepository;
-			ShowCurrentPage();
+			
+			if (customer.moderator)
+			{
+				ShowCurrentPage();
+			}
 		}
 
 		private void CloseWin()
 		{
-			Remove(this);
+			Application.RequestStop();
 		}
 
 		private void OnSearchPress(KeyEventEventArgs args)
@@ -133,7 +137,7 @@ namespace Progbase3
 				bool result = customersRepository.Delete(customer.id);
 				if (result)
 				{
-					closed = true;
+					Application.RequestStop();
 				}
 				else
 				{

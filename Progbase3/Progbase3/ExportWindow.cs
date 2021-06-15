@@ -10,7 +10,6 @@ namespace Progbase3
 		private Label zipFileLbl;
 		private Label xmlFilePathLbl;
 		private TextField value;
-		public bool closed;
 
 		public ExportWindow(ProductsRepository productsRepository)
 		{
@@ -65,7 +64,7 @@ namespace Progbase3
 
 		private void GoBack()
 		{
-			closed = true;
+			Application.RequestStop();
 		}
 
 		private void ExportData()

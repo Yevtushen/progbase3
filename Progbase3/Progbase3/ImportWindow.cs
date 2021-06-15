@@ -9,7 +9,6 @@ namespace Progbase3
 		private Label targetFolderLbl;
 		private Label zipFileLbl;
 		private Label xmlFilePathLbl;
-		public bool closed;
 
 		public ImportWindow(ProductsRepository productsRepository)
 		{
@@ -56,7 +55,7 @@ namespace Progbase3
 
 		private void GoBack()
 		{
-			closed = true;
+			Application.RequestStop();
 		}
 
 		private void ImportData()

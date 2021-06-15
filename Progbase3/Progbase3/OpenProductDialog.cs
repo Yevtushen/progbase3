@@ -154,12 +154,8 @@ namespace Progbase3
 		}
 
 		public Product GetProduct()
-		{
-			if (inOrder.Checked == true)
-			{
-				product.left--;
-			}
-			return this.product;
+		{			
+			return product;
 		}
 
 		private void OnOpenDialogCanceled()

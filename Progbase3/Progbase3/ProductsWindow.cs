@@ -20,14 +20,17 @@ namespace Progbase3
 		private Label totalPagesLabel;
 		private int pageSize = 5;
 		private int pageNumber = 1;
-		public bool closed;
+		private Button submitOrderBtn;
 
 		public ProductsWindow(Customer customer, ProductsRepository productsRepository, OrdersRepository ordersRepository)
 		{
 			this.customer = customer;
 			this.productsRepository = productsRepository;
 			this.ordersRepository = ordersRepository;
-			order = new Order();
+			order = new Order()
+			{
+				customer_id = customer.id
+			};
 
 			Title = "Store";
 
@@ -101,7 +104,7 @@ namespace Progbase3
 				Height = pageSize + 2
 			};
 
-			Button submitOrderBtn = new Button(2, 3, "Submit your order")
+			submitOrderBtn = new Button(2, 3, "Submit your order")
 			{
 				Visible = false
 			};
@@ -125,7 +128,7 @@ namespace Progbase3
 
 		private void CloseWindow()
 		{			
-			closed = true;
+			Application.RequestStop();
 		}
 
 		private void OnSearchPress(KeyEventEventArgs args)
@@ -139,8 +142,12 @@ namespace Progbase3
 
 		private void OnSubmitOrder()
 		{
+			foreach (var p in order.products)
+			{
+				p.left--;
+			}
 			ordersRepository.Insert(order);
-			closed = true;
+			Application.RequestStop();
 		}
 
 		private void OnCreateButtonClicked()
@@ -150,8 +157,8 @@ namespace Progbase3
 			if (!dialog.canceled)
 			{
 				Product p = dialog.GetProduct();
-				long activid = productsRepository.Insert(p);
-				p.id = activid;
+				long productId = productsRepository.Insert(p);
+				p.id = productId;
 				allProductsListView.SetSource(productsRepository.GetSearchPage(filterValue, pageNumber, pageSize));
 			}
 		}
@@ -192,10 +199,13 @@ namespace Progbase3
 			OpenProductDialog dialog = new OpenProductDialog(product, customer, order);
 			dialog.SetProduct(product);
 			Application.Run(dialog);
+			
 			if (dialog.inOrder.Checked)
 			{
+				submitOrderBtn.Visible = true;
 				order.products.Add(product);
 			}
+
 			if (dialog.deleted)
 			{
 				bool result = productsRepository.Delete(customer.id);
@@ -215,6 +225,7 @@ namespace Progbase3
 					MessageBox.ErrorQuery("Delete product", "Not able to delete the product", "OK");
 				}
 			}
+
 			else if (dialog.updated)
 			{
 				bool result = productsRepository.Update(customer.id, dialog.GetProduct());

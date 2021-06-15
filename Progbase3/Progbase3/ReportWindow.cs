@@ -5,7 +5,6 @@ namespace Progbase3
 {
 	public class ReportWindow : Window
 	{
-		public bool closed;
 		private ProductsRepository productsRepository;
 
 
@@ -32,7 +31,7 @@ namespace Progbase3
 
 		private void CloseWindow()
 		{
-			closed = true;
+			Application.RequestStop();
 		}
 
 		private void CreateReport()
