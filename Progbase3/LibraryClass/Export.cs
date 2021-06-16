@@ -14,7 +14,7 @@ namespace LibraryClass
 			{
 				formatter.Serialize(fs, rep.GetExport(value));
 			}
-
+			
 			ZipFile.CreateFromDirectory(sourceFolder, zipFile);
 		}
 	}

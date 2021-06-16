@@ -8,17 +8,14 @@ namespace Progbase3
 		public bool deleted;
 		public bool updated;
 		private Customer customer;
-		private Customer customerOriginal;
 		private TextField idInput;
 		private TextField nameInput;
 		private TextField adressInput;
-		private CheckBox isModerator;
 		private TextField passwordInput;
 
-		public OpenCustomerDialog(Customer customerOriginal, Customer customer)
+		public OpenCustomerDialog(Customer customer)
 		{			
 			this.customer = customer;
-			this.customerOriginal = customerOriginal;
 			Title = "Customer settings";
 
 			Button backBtn = new Button("Back");
@@ -56,10 +53,6 @@ namespace Progbase3
 				ReadOnly = true
 			};
 			Add(adressLbl, adressInput);
-
-			isModerator = new CheckBox(2, 10, "Is moderator");
-			isModerator.Visible = false;
-			Add(isModerator);
 
 			Label passwordLbl = new Label(2, 8, "Your password");
 			passwordLbl.Visible = false;
@@ -103,18 +96,11 @@ namespace Progbase3
 			Application.Run(dialog);
 			if (!dialog.canceled)
 			{
-				if (customerOriginal == customer)
-				{
-					nameInput.ReadOnly = false;
-					adressInput.ReadOnly = false;
-					passwordInput.Visible = true;
-					passwordInput.ReadOnly = false;
-				}
+				nameInput.ReadOnly = false;
+				adressInput.ReadOnly = false;
+				passwordInput.Visible = true;
+				passwordInput.ReadOnly = false;				
 				
-				if (customer.moderator)
-				{
-					isModerator.Visible = true;
-				}
 				Customer updatedCustomer = dialog.GetCustomer();
 				updated = true;
 				SetCustomer(updatedCustomer);
@@ -123,7 +109,6 @@ namespace Progbase3
 			adressInput.ReadOnly = true;
 			passwordInput.ReadOnly = false;
 			passwordInput.Visible = false;
-			isModerator.Visible = false;
 		}
 
 		private void OnOpenDialogCanceled()

@@ -15,7 +15,7 @@ namespace Progbase3
 		protected TextField nameInput;
 		protected TextField priceInput;
 		protected TextField leftInput;
-		protected TextView descriptionInput;
+		protected TextField descriptionInput;
 		public CheckBox inOrder;
 		private Order order;
 
@@ -73,11 +73,11 @@ namespace Progbase3
 			Add(leftLbl, leftInput);
 
 			Label descriptionLbl = new Label(2, 10, "Description:");
-			descriptionInput = new TextView()
+			descriptionInput = new TextField()
 			{
 				X = rightColumnX,
 				Y = Pos.Top(descriptionLbl),
-				Width = 40,
+				Width = 80,
 				Text = "",
 				ReadOnly = true
 			};
@@ -131,6 +131,7 @@ namespace Progbase3
 				Product updatedProduct = dialog.GetProduct();
 				updated = true;
 				SetProduct(updatedProduct);
+				idInput.Text = product.id.ToString();
 			}
 			nameInput.ReadOnly = true;
 			priceInput.ReadOnly = true;

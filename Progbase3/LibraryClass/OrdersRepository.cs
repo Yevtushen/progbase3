@@ -156,11 +156,30 @@ namespace LibraryClass
             List<Order> orders = new List<Order>();
             while (reader.Read())
             {
+                Order order = GetOrder(reader);
+                order.products = GetProductsInOrder(order.id);
                 orders.Add(GetOrder(reader));
             }
             reader.Close();
             connection.Close();
             return orders;
+        }
+
+        public List<Product> GetProductsInOrder(long orderId)
+        {
+            List<Product> products = new List<Product>();
+            connection.Open();
+            SqliteCommand command = connection.CreateCommand();
+            command.CommandText = @"SELECT products.* FROM products CROSS JOIN product_to_order WHERE products.id = product_to_order.product_id AND product_to_order.order_id = $order_id";
+            command.Parameters.AddWithValue("$order_id", orderId);
+            SqliteDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                products.Add(ProductsRepository.GetProduct(reader));
+            }
+            reader.Close();
+            connection.Close();
+            return products;
         }
 
         public List<Order> GetProducts()

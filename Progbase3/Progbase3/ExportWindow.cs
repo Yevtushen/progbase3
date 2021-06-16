@@ -1,4 +1,5 @@
-﻿using Terminal.Gui;
+﻿using System;
+using Terminal.Gui;
 using LibraryClass;
 
 namespace Progbase3
@@ -53,7 +54,7 @@ namespace Progbase3
 			};
 			this.Add(value, valuelbl);
 
-			Button exportBtn = new Button(2, 10, "Import");
+			Button exportBtn = new Button(2, 12, "Export");
 			exportBtn.Clicked += ExportData;
 			this.Add(exportBtn);
 
@@ -71,13 +72,20 @@ namespace Progbase3
 		{
 			Export export = new Export();
 
-			export.ExportProducts(productsRepository, value.Text.ToString(), xmlFilePathLbl.Text.ToString(), sourceFolderLbl.Text.ToString(), zipFileLbl.Text.ToString());
+			try
+			{
+				export.ExportProducts(productsRepository, value.Text.ToString(), xmlFilePathLbl.Text.ToString(), sourceFolderLbl.Text.ToString(), zipFileLbl.Text.ToString());
+				MessageBox.Query("Export", "Exported", "OK");
+			}
+			catch (Exception ex)
+			{
+				MessageBox.ErrorQuery("Export failed", ex.Message, "OK");
+			}
 		}
 
 		private void SelectZipFile()
 		{
 			OpenDialog dialog = new OpenDialog("Open ZIP file", "Open?");
-			//dialog.DirectoryPath = 
 
 			Application.Run(dialog);
 
@@ -95,7 +103,6 @@ namespace Progbase3
 		private void SelectXMLFile()
 		{
 			OpenDialog dialog = new OpenDialog("Open XML file", "Open?");
-			// dialog.DirectoryPath = ...
 
 			Application.Run(dialog);
 

@@ -9,7 +9,7 @@ namespace Progbase3
 		protected TextField nameInput;
 		protected TextField priceInput;
 		protected TextField leftInput;
-		protected TextField descriptionInput;
+		protected TextView descriptionInput;
 
 		public CreateProductDialog()
 		{
@@ -30,7 +30,6 @@ namespace Progbase3
 				X = rightColumnX,
 				Y = Pos.Top(nameLbl),
 				Width = 40,
-				ReadOnly = true
 			};
 			Add(nameLbl, nameInput);
 
@@ -40,7 +39,6 @@ namespace Progbase3
 				X = rightColumnX,
 				Y = Pos.Top(priceLbl),
 				Width = 40,
-				ReadOnly = true
 			};
 			Add(priceLbl, priceInput);
 
@@ -50,17 +48,16 @@ namespace Progbase3
 				X = rightColumnX,
 				Y = Pos.Top(leftLbl),
 				Width = 60,
-				ReadOnly = true
 			};
 			Add(leftLbl, leftInput);
 
 			Label descriptionLbl = new Label(2, 10, "Description:");
-			descriptionInput = new TextField("")
+			descriptionInput = new TextView()
 			{
 				X = rightColumnX,
-				Y = Pos.Top(descriptionLbl),
-				Width = 40,
-				ReadOnly = true
+				Y = Pos.Top(descriptionLbl),				
+				Width = Dim.Fill(5),
+				Height = Dim.Percent(50)
 			};
 			Add(descriptionLbl, descriptionInput);
 		}

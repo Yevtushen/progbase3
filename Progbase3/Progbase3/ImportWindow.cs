@@ -1,4 +1,5 @@
-﻿using Terminal.Gui;
+﻿using System;
+using Terminal.Gui;
 using LibraryClass;
 
 namespace Progbase3
@@ -61,8 +62,16 @@ namespace Progbase3
 		private void ImportData()
 		{
 			Import import = new Import();
-			import.ImportProduct(productsRepository, targetFolderLbl.Text.ToString(), zipFileLbl.Text.ToString(), xmlFilePathLbl.Text.ToString());
 
+			try
+			{
+				import.ImportProduct(productsRepository, targetFolderLbl.Text.ToString(), zipFileLbl.Text.ToString(), xmlFilePathLbl.Text.ToString());
+				MessageBox.Query("Import", "Imported", "OK");
+			}
+			catch (Exception ex)
+			{
+				MessageBox.ErrorQuery("Import failed", ex.Message, "OK");
+			}
 		}
 
 		private void SelectZipFile()

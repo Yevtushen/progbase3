@@ -12,7 +12,8 @@ namespace Progbase3
 		private Customer customer;
 		private Order order;
 		private TextField searchField;
-		private string filterValue = "";
+		private Button searchBtn;
+		private string filterValue => searchField.Text?.ToString() ?? "";
 		protected ListView allProductsListView;
 		private Button prevPageBtn;
 		private Button nextPageBtn;
@@ -42,8 +43,12 @@ namespace Progbase3
 			Add(menu);
 
 			searchField = new TextField(2, 1, 20, "");
-			searchField.KeyPress += OnSearchPress;
+		//	searchField.KeyPress += OnSearchPress;
 			Add(searchField);
+
+			searchBtn = new Button(25, 1, "Search");
+			searchBtn.Clicked += OnSearch;
+			Add(searchBtn);
 
 			allProductsListView = new ListView(new List<Product>())
 			{
@@ -135,9 +140,14 @@ namespace Progbase3
 		{
 			if (args.KeyEvent.Key == Key.Enter)
 			{
-				filterValue = searchField.Text.ToString();
+			//	filterValue = searchField.Text.ToString();
 				ShowCurrentPage();
 			}
+		}
+
+		private void OnSearch()
+		{
+			ShowCurrentPage();
 		}
 
 		private void OnSubmitOrder()
@@ -203,6 +213,7 @@ namespace Progbase3
 			if (dialog.inOrder.Checked)
 			{
 				submitOrderBtn.Visible = true;
+				submitOrderBtn.Redraw(submitOrderBtn.Bounds);
 				order.products.Add(product);
 			}
 

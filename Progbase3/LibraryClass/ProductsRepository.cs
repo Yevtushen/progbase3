@@ -149,7 +149,7 @@ namespace LibraryClass
 		{
             connection.Open();
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = @"UPDATE activities SET name = $name, price = $price, left = $left, description = $description WHERE id = $id";
+            command.CommandText = @"UPDATE products SET name = $name, price = $price, left = $left, description = $description WHERE id = $id";
             command.Parameters.AddWithValue("$name", p.name);
             command.Parameters.AddWithValue("$price", p.price);
             command.Parameters.AddWithValue("$left", p.left);
@@ -213,10 +213,10 @@ namespace LibraryClass
             }
 
             connection.Open();
-            value = $"%{value}%";
+            //value = $"%{value}%";
             List<Product> searchProducts = new List<Product>();
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = @"SELECT * FROM products WHERE name LIKE $value";
+            command.CommandText = @"SELECT * FROM products WHERE name LIKE '%' || $value || '%'"; //
             command.Parameters.AddWithValue("$value", value);
             SqliteDataReader reader = command.ExecuteReader();
             while (reader.Read())
