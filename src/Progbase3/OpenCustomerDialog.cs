@@ -1,4 +1,5 @@
-﻿using Terminal.Gui;
+﻿using System;
+using Terminal.Gui;
 using LibraryClass;
 
 namespace Progbase3
@@ -97,14 +98,21 @@ namespace Progbase3
 		private void OnCustomerEdit()
 		{
 			EditCustomerDialog dialog = new EditCustomerDialog();
-			dialog.SetCustomer(customer);
+			try
+			{
+				dialog.SetCustomer(customer);
 
-			Application.Run(dialog);
-			if (!dialog.canceled)
-			{				
-				Customer updatedCustomer = dialog.GetCustomer();
-				updated = true;
-				SetCustomer(updatedCustomer);
+				Application.Run(dialog);
+				if (!dialog.canceled)
+				{
+					Customer updatedCustomer = dialog.GetCustomer();
+					updated = true;
+					SetCustomer(updatedCustomer);
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.ErrorQuery("Editing", ex.Message, "OK");
 			}
 			nameInput.ReadOnly = true;
 			addressInput.ReadOnly = true;

@@ -120,18 +120,25 @@ namespace Progbase3
 		private void OnProductEdit()
 		{
 			EditProductDialog dialog = new EditProductDialog();
-			dialog.SetProduct(product);
-			Application.Run(dialog);
-			if (!dialog.canceled)
+			try
 			{
-				nameInput.ReadOnly = false;
-				priceInput.ReadOnly = false;
-				leftInput.ReadOnly = false;
-				descriptionInput.ReadOnly = false;
-				Product updatedProduct = dialog.GetProduct();
-				updated = true;
-				SetProduct(updatedProduct);
-				idInput.Text = product.id.ToString();
+				dialog.SetProduct(product);
+				Application.Run(dialog);
+				if (!dialog.canceled)
+				{
+					nameInput.ReadOnly = false;
+					priceInput.ReadOnly = false;
+					leftInput.ReadOnly = false;
+					descriptionInput.ReadOnly = false;
+					Product updatedProduct = dialog.GetProduct();
+					updated = true;
+					SetProduct(updatedProduct);
+					idInput.Text = product.id.ToString();
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.ErrorQuery("Updating product", ex.Message, "OK");
 			}
 			nameInput.ReadOnly = true;
 			priceInput.ReadOnly = true;
