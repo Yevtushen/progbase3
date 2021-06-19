@@ -9,7 +9,8 @@ namespace Progbase3
 		protected CustomersRepository customersRepository;
 		private Customer customer;
 		private TextField searchField;
-		private string filterValue = "";
+		private Button searchBtn;
+		private string filterValue => searchField.Text?.ToString() ?? "";
 		private ListView allCustomersListView;
 		private Button prevPageBtn;
 		private Button nextPageBtn;
@@ -39,8 +40,11 @@ namespace Progbase3
 			if (customer.moderator)
 			{
 				searchField = new TextField(2, 1, 20, "");
-				searchField.KeyPress += OnSearchPress;
 				Add(searchField);
+
+				searchBtn = new Button(25, 1, "Search");
+				searchBtn.Clicked += OnSearch;
+				Add(searchBtn);
 
 				allCustomersListView = new ListView(new List<Customer>())
 				{
@@ -103,6 +107,11 @@ namespace Progbase3
 			}
 		}
 
+		private void OnSearch()
+		{
+			ShowCurrentPage();
+		}
+
 		public void SetRepository(CustomersRepository customersRepository)
 		{
 			this.customersRepository = customersRepository;
@@ -118,18 +127,9 @@ namespace Progbase3
 			Application.RequestStop();
 		}
 
-		private void OnSearchPress(KeyEventEventArgs args)
-		{
-			if (args.KeyEvent.Key == Key.Enter)
-			{
-				filterValue = searchField.Text.ToString();
-				ShowCurrentPage();
-			}
-		}
-
 		private void OnYouOpen()
 		{
-			OpenCustomerDialog dialog = new OpenCustomerDialog(customer);
+			OpenCustomerDialog dialog = new OpenCustomerDialog(customer, customer);
 			dialog.SetCustomer(customer);
 			Application.Run(dialog);
 			if (dialog.deleted)
@@ -186,9 +186,9 @@ namespace Progbase3
 
 		private void OnOpenCustomer(ListViewItemEventArgs args)
 		{
-			Customer customer = (Customer)args.Value;
-			OpenCustomerDialog dialog = new OpenCustomerDialog(customer);
-			dialog.SetCustomer(customer);
+			Customer listcustomer = (Customer)args.Value;
+			OpenCustomerDialog dialog = new OpenCustomerDialog(customer, listcustomer);
+			dialog.SetCustomer(listcustomer);
 			Application.Run(dialog);
 			if (dialog.deleted)
 			{

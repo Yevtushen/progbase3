@@ -213,10 +213,10 @@ namespace LibraryClass
             }
 
             connection.Open();
-            //value = $"%{value}%";
+            value = $"%{value}%";
             List<Product> searchProducts = new List<Product>();
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = @"SELECT * FROM products WHERE name LIKE '%' || $value || '%'"; //
+            command.CommandText = @"SELECT * FROM products WHERE name LIKE $value"; //
             command.Parameters.AddWithValue("$value", value);
             SqliteDataReader reader = command.ExecuteReader();
             while (reader.Read())
@@ -260,23 +260,6 @@ namespace LibraryClass
             return page;
         }
 
-        public List<Product> GetProductsInOrder(long orderId)
-        {
-            List<Product> orders = new List<Product>();
-            connection.Open();
-            SqliteCommand command = connection.CreateCommand();
-            command.CommandText = @"SELECT products.* FROM products CROSS JOIN product_to_order WHERE products.id = product_to_order.product_id AND product_to_order.order_id = $order_id";
-            command.Parameters.AddWithValue("$order_id", orderId);
-            SqliteDataReader reader = command.ExecuteReader();
-            while (reader.Read())
-            {
-                orders.Add(GetProduct(reader));
-            }
-            reader.Close();
-            connection.Close();
-            return orders;
-        }
-
 
         public Dictionary<long, List<Product>> GetProductsInOrders()
         {
@@ -287,16 +270,16 @@ namespace LibraryClass
             SqliteDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
-                var orderId = (long)reader["order_id"];
+                var orderId = long.Parse(reader.GetString(0));
                 if (productsInOrders.ContainsKey(orderId))
                 {
                     List<Product> products = productsInOrders[orderId];
-                    products.Add(GetProduct(reader));
+                    products.Add(GetProductForOrder(reader));
                 }
                 else
                 {
                     List<Product> products = new List<Product>();
-                    products.Add(GetProduct(reader));
+                    products.Add(GetProductForOrder(reader));
                     productsInOrders.Add(orderId, products);
                 }
             }
@@ -305,5 +288,18 @@ namespace LibraryClass
             return productsInOrders;
         }
 
+        private static Product GetProductForOrder(SqliteDataReader reader)
+        {
+            Product product = new Product()
+            {
+                id = long.Parse(reader.GetString(1)),
+                name = reader.GetString(2),
+                price = int.Parse(reader.GetString(3)),
+                left = int.Parse(reader.GetString(4)),
+                description = reader.GetString(5)
+            };
+
+            return product;
+        }
     }
 }

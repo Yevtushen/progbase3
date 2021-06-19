@@ -6,7 +6,7 @@ namespace LibraryClass
 	{
 		public long id;
 		public string name;
-		public string adress;
+		public string address;
 		public string password;
 		public bool moderator;
 		public List<Order> orders;
@@ -15,7 +15,7 @@ namespace LibraryClass
 		{
 			id = 0;
 			name = "";
-			adress = "";
+			address = "";
 			password = "";
 			moderator = false;
 			orders = new List<Order>();

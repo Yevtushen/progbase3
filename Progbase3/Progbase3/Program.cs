@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.Data.Sqlite;
-using System.Collections.Generic;
+﻿using Microsoft.Data.Sqlite;
 using Terminal.Gui;
 
 namespace Progbase3
@@ -16,21 +14,6 @@ namespace Progbase3
 			UserInterface win = new UserInterface(connection);
 			top.Add(win);
 			Application.Run();
-		}
-
-
-		/*private static void DBProcessing()
-		{
-			string databaseString = "D:\\victo\\kpi\\progbase projects\\progbase3\\data\\newbase.db";
-			SqliteConnection connection = new SqliteConnection($"Data Source={databaseString}");
-		}
-
-		private static void UserInterface()
-		{
-			Application.Init();
-
-			Application.Run();
-		}*/
-		
+		}		
 	}
 }

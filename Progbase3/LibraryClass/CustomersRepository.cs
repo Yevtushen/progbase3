@@ -19,7 +19,7 @@ namespace LibraryClass
             {
                 id = int.Parse(reader.GetString(0)),
                 name = reader.GetString(1),
-                adress = reader.GetString(2),
+                address = reader.GetString(2),
                 password = reader.GetString(3),
                 moderator = Convert.ToBoolean(int.Parse(reader.GetString(4)))
             };
@@ -54,13 +54,13 @@ namespace LibraryClass
             SqliteCommand command = connection.CreateCommand();
             command.CommandText =
             @"
-    INSERT INTO customers (name, adress, password, moderator) 
-    VALUES ($name, $adress, $password, $moderator);
+    INSERT INTO customers (name, address, password, moderator) 
+    VALUES ($name, $address, $password, $moderator);
  
     SELECT last_insert_rowid();
 ";
             command.Parameters.AddWithValue("$name", c.name);
-            command.Parameters.AddWithValue("$adress", c.adress);
+            command.Parameters.AddWithValue("$address", c.address);
             command.Parameters.AddWithValue("$password", c.password);
             command.Parameters.AddWithValue("$moderator", 0);
             long newId = (long)command.ExecuteScalar();
@@ -111,9 +111,9 @@ namespace LibraryClass
         {
             connection.Open();
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = @"SELECT * FROM customers WHERE name = $name AND adress = $adress";
+            command.CommandText = @"SELECT * FROM customers WHERE name = $name AND address = $address";
             command.Parameters.AddWithValue("$name", name);
-            command.Parameters.AddWithValue("$adress", adress);
+            command.Parameters.AddWithValue("$address", adress);
             SqliteDataReader reader = command.ExecuteReader();
             if (reader.Read())
             {
@@ -129,9 +129,9 @@ namespace LibraryClass
 		{
             connection.Open();
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = @"UPDATE customers SET name = $name, adress = $adress, password = $password WHERE id = $id";
+            command.CommandText = @"UPDATE customers SET name = $name, address = $address, password = $password WHERE id = $id";
             command.Parameters.AddWithValue("$name", c.name);
-            command.Parameters.AddWithValue("$adress", c.adress);
+            command.Parameters.AddWithValue("$address", c.address);
             command.Parameters.AddWithValue("$password", c.password);
             command.Parameters.AddWithValue("$id", id);
             int nChanged = command.ExecuteNonQuery();
@@ -224,7 +224,7 @@ namespace LibraryClass
             SqliteCommand command = connection.CreateCommand();
             int pageEnd = pageSize * (pageNumber - 1);
             value = $"%{value}%";
-            command.CommandText = @"SELECT * FROM customers LIMIT $pageSize OFFSET $pageNumberEnd WHERE name LIKE $value";
+            command.CommandText = @"SELECT * FROM customers WHERE name LIKE $value LIMIT $pageSize OFFSET $pageNumberEnd";
             command.Parameters.AddWithValue("$pageSize", pageSize);
             command.Parameters.AddWithValue("$pageNumberEnd", pageEnd);
             command.Parameters.AddWithValue("$value", value);

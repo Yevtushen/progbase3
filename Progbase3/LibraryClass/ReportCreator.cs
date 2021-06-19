@@ -15,9 +15,9 @@ namespace LibraryClass
 			this.productsRepository = productsRepository;
 		}
 
-		public void SaveReport(string filePath)
+		public void SaveReport()
 		{
-			var docxReportCreator = new DocxReportCreator(filePath);
+			var docxReportCreator = new DocxReportCreator();
 			var xmlDocument = docxReportCreator.GetXmlTemplate();
 
 			FindAndReplace(xmlDocument.Root);
@@ -114,7 +114,7 @@ namespace LibraryClass
 			double[] ys = products.Select(p => (double)p.price).ToArray();
 
 			plt.PlotBar(xs, ys);
-			//	plt.PlotScatter(xs, ys, markerSize: 0, lineWidth: 2, color: Color.Black);
+
 			plt.Title("Product-price relation");
 			plt.YLabel("Price");
 			string[] labels = products.Select(p => p.name.Replace(' ', '\n')).ToArray();

@@ -146,6 +146,7 @@ namespace LibraryClass
         public List<Order> GetPage(int pageNumber, int pageSize, long customer_id)
         {
             connection.Open();
+            List<Order> orders = new List<Order>();
             SqliteCommand command = connection.CreateCommand();
             int pageEnd = pageSize * (pageNumber - 1);
             command.CommandText = @"SELECT * FROM orders WHERE customer_id = $customer_id LIMIT $pageSize OFFSET $pageNumberEnd";
@@ -153,13 +154,17 @@ namespace LibraryClass
             command.Parameters.AddWithValue("$pageSize", pageSize);
             command.Parameters.AddWithValue("$pageNumberEnd", pageEnd);
             SqliteDataReader reader = command.ExecuteReader();
-            List<Order> orders = new List<Order>();
+            
             while (reader.Read())
-            {
-                Order order = GetOrder(reader);
+            {                    
+                Order order = new Order()
+                {
+                    id = long.Parse(reader.GetString(0)),
+                    customer_id = long.Parse(reader.GetString(1)),
+                };
                 order.products = GetProductsInOrder(order.id);
-                orders.Add(GetOrder(reader));
-            }
+                orders.Add(order);
+             }
             reader.Close();
             connection.Close();
             return orders;
@@ -168,7 +173,6 @@ namespace LibraryClass
         public List<Product> GetProductsInOrder(long orderId)
         {
             List<Product> products = new List<Product>();
-            connection.Open();
             SqliteCommand command = connection.CreateCommand();
             command.CommandText = @"SELECT products.* FROM products CROSS JOIN product_to_order WHERE products.id = product_to_order.product_id AND product_to_order.order_id = $order_id";
             command.Parameters.AddWithValue("$order_id", orderId);
@@ -178,24 +182,7 @@ namespace LibraryClass
                 products.Add(ProductsRepository.GetProduct(reader));
             }
             reader.Close();
-            connection.Close();
             return products;
-        }
-
-        public List<Order> GetProducts()
-        {
-            connection.Open();
-            SqliteCommand command = connection.CreateCommand();
-            command.CommandText = @"SELECT * FROM orders";
-            SqliteDataReader reader = command.ExecuteReader();
-            List<Order> orders = new List<Order>();
-            while (reader.Read())
-            {
-                orders.Add(GetOrder(reader));
-            }
-            reader.Close();
-            connection.Close();
-            return orders;
         }
     }
 }

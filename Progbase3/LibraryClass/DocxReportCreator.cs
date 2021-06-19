@@ -10,9 +10,10 @@ namespace LibraryClass
 		private string name;
 		private string destination;
 
-		public DocxReportCreator(string fileName)
+		public DocxReportCreator()
 		{
-			destination = fileName.Substring(0, fileName.LastIndexOf("\\"));
+			string fileName = "../../../../../data/report/report.docx";
+			destination = fileName.Substring(0, fileName.LastIndexOf("/"));
 			name = Path.GetFileNameWithoutExtension(fileName);
 		}
 
@@ -20,7 +21,7 @@ namespace LibraryClass
 		{
 			var folderName = Path.Combine(destination, name);
 
-			var templateDir = new DirectoryInfo("D:\\private\\ReportTemplate");
+			var templateDir = new DirectoryInfo("../../../../../data/template/ReportTemplate");
 			CopyDirectory(templateDir, folderName);
 
 			var xmlDocument = ReadXml(folderName);
@@ -37,7 +38,7 @@ namespace LibraryClass
 
 		public string GetImageFileName()
 		{
-			return Path.Combine(destination, name, "media\\image1.png");
+			return Path.Combine(destination, name, "word\\media\\image1.png");
 		}
 
 

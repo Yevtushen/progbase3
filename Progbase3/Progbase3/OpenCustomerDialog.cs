@@ -8,14 +8,16 @@ namespace Progbase3
 		public bool deleted;
 		public bool updated;
 		private Customer customer;
+		private Customer listCustomer;
 		private TextField idInput;
 		private TextField nameInput;
-		private TextField adressInput;
+		private TextField addressInput;
 		private TextField passwordInput;
 
-		public OpenCustomerDialog(Customer customer)
+		public OpenCustomerDialog(Customer customer, Customer listCustomer)
 		{			
 			this.customer = customer;
+			this.listCustomer = listCustomer;
 			Title = "Customer settings";
 
 			Button backBtn = new Button("Back");
@@ -44,20 +46,20 @@ namespace Progbase3
 			};
 			Add(nameLbl, nameInput);
 
-			Label adressLbl = new Label(2, 6, "Adress:");
-			adressInput = new TextField("")
+			Label addressLbl = new Label(2, 6, "Adress:");
+			addressInput = new TextField("")
 			{
 				X = rightColumnX,
-				Y = Pos.Top(adressLbl),
+				Y = Pos.Top(addressLbl),
 				Width = 40,
 				ReadOnly = true
 			};
-			Add(adressLbl, adressInput);
+			Add(addressLbl, addressInput);
 
 			Label passwordLbl = new Label(2, 8, "Your password");
 			passwordLbl.Visible = false;
 			passwordInput = new TextField("")
-			{ 
+			{
 				X = rightColumnX,
 				Y = Pos.Top(passwordLbl),
 				Width = 40,
@@ -66,17 +68,20 @@ namespace Progbase3
 			};
 			Add(passwordLbl, passwordInput);
 
-			Button editBtn = new Button(2, 16, "Update");
-			editBtn.Clicked += OnCustomerEdit;
-			Add(editBtn);
-
-			Button deleteBtn = new Button("Delete")
-			{
-				X = Pos.Right(editBtn) + 2,
-				Y = Pos.Top(editBtn)
-			};
+			Button deleteBtn = new Button(2, 16, "Delete");
 			deleteBtn.Clicked += OnCustomerDelete;
 			Add(deleteBtn);
+
+			if (customer.id == listCustomer.id)
+			{
+				Button editBtn = new Button("Update")
+				{
+					X = Pos.Right(deleteBtn) + 2,
+					Y = Pos.Top(deleteBtn)
+				};
+				editBtn.Clicked += OnCustomerEdit;
+				Add(editBtn);
+			}
 		}
 
 		private void OnCustomerDelete()
@@ -93,20 +98,16 @@ namespace Progbase3
 		{
 			EditCustomerDialog dialog = new EditCustomerDialog();
 			dialog.SetCustomer(customer);
+
 			Application.Run(dialog);
 			if (!dialog.canceled)
-			{
-				nameInput.ReadOnly = false;
-				adressInput.ReadOnly = false;
-				passwordInput.Visible = true;
-				passwordInput.ReadOnly = false;				
-				
+			{				
 				Customer updatedCustomer = dialog.GetCustomer();
 				updated = true;
 				SetCustomer(updatedCustomer);
 			}
 			nameInput.ReadOnly = true;
-			adressInput.ReadOnly = true;
+			addressInput.ReadOnly = true;
 			passwordInput.ReadOnly = false;
 			passwordInput.Visible = false;
 		}
@@ -121,7 +122,7 @@ namespace Progbase3
 			this.customer = customer;
 			idInput.Text = customer.id.ToString();
 			nameInput.Text = customer.name;
-			adressInput.Text = customer.adress;
+			addressInput.Text = customer.address;
 			
 		}
 

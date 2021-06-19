@@ -9,8 +9,7 @@ namespace Progbase3
 	{
 		public bool canceled;
 		private TextField nameInput;
-		private TextField adressInput;
-		private CheckBox isModerator;
+		private TextField addressInput;
 		private TextField passwordInput;
 		private SHA256 sha256Hash = SHA256.Create();
 
@@ -32,19 +31,17 @@ namespace Progbase3
 				X = rightColumnX,
 				Y = Pos.Top(nameLbl),
 				Width = 40,
-				ReadOnly = true
 			};
 			Add(nameLbl, nameInput);
 
 			Label adressLbl = new Label(2, 6, "Adress:");
-			adressInput = new TextField("")
+			addressInput = new TextField("")
 			{
 				X = rightColumnX,
 				Y = Pos.Top(adressLbl),
 				Width = 40,
-				ReadOnly = true
 			};
-			Add(adressLbl, adressInput);
+			Add(adressLbl, addressInput);
 
 			Label passwordLbl = new Label(2, 8, "Password:");
 			passwordInput = new TextField("")
@@ -52,11 +49,8 @@ namespace Progbase3
 				X = rightColumnX,
 				Y = Pos.Top(passwordLbl),
 				Width = 60,
-				ReadOnly = true
 			};
 			Add(passwordLbl, passwordInput);
-
-			isModerator = new CheckBox(2, 10, "Is moderator");
 		}
 
 		private void OnEditDialogSubmitted()
@@ -74,8 +68,7 @@ namespace Progbase3
 		public void SetCustomer(Customer customer)
 		{
 			nameInput.Text = customer.name;
-			adressInput.Text = customer.adress;
-			isModerator.Checked = bool.Parse(customer.moderator.ToString());
+			addressInput.Text = customer.address;
 		}
 
 		public Customer GetCustomer()
@@ -83,15 +76,13 @@ namespace Progbase3
 			return new Customer()
 			{
 				name = nameInput.Text.ToString(),
-				adress = adressInput.Text.ToString(),
-				moderator = bool.Parse(isModerator.Checked.ToString()),
+				address = addressInput.Text.ToString(),
 				password = GetHash(sha256Hash, passwordInput.Text.ToString())
 			};
 		}
 
 		private static string GetHash(HashAlgorithm hashAlgorithm, string input)
 		{
-
 			byte[] data = hashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(input));
 			var sBuilder = new StringBuilder();
 			for (int i = 0; i < data.Length; i++)

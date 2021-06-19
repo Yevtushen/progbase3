@@ -37,7 +37,7 @@ namespace Progbase3
 		private void CreateReport()
 		{
 			ReportCreator reportCreator = new ReportCreator(productsRepository);
-			reportCreator.SaveReport("../../../../../data/report.docx");
+			reportCreator.SaveReport();
 			MessageBox.Query("Report creation", "Report created", "OK!");
 		}
 	}

@@ -10,7 +10,7 @@ namespace Progbase3
 
 		public LogInDialog()
 		{
-			int rightColumnX = 20;
+			int rightColumnX = 22;
 			
 			Title = "Log In";
 

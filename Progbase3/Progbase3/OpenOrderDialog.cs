@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Terminal.Gui;
+﻿using Terminal.Gui;
 using LibraryClass;
 
 namespace Progbase3
@@ -71,9 +70,13 @@ namespace Progbase3
 			this.order = order;
 			idInput.Text = order.id.ToString();
 			string products = "";
-			foreach (var p in order.products)
+			for (int i = 0; i < order.products.Count; i++)
 			{
-				products += p.name + " ";
+				products += order.products[i].name;
+				if (i != order.products.Count - 1)
+				{
+					products += ", ";
+				}
 			}
 			productsInput.Text = products;
 		}

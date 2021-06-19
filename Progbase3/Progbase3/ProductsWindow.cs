@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Terminal.Gui;
 using LibraryClass;
 
@@ -43,7 +44,6 @@ namespace Progbase3
 			Add(menu);
 
 			searchField = new TextField(2, 1, 20, "");
-		//	searchField.KeyPress += OnSearchPress;
 			Add(searchField);
 
 			searchBtn = new Button(25, 1, "Search");
@@ -136,15 +136,7 @@ namespace Progbase3
 			Application.RequestStop();
 		}
 
-		private void OnSearchPress(KeyEventEventArgs args)
-		{
-			if (args.KeyEvent.Key == Key.Enter)
-			{
-			//	filterValue = searchField.Text.ToString();
-				ShowCurrentPage();
-			}
-		}
-
+		
 		private void OnSearch()
 		{
 			ShowCurrentPage();
@@ -166,9 +158,17 @@ namespace Progbase3
 			Application.Run(dialog);
 			if (!dialog.canceled)
 			{
-				Product p = dialog.GetProduct();
-				long productId = productsRepository.Insert(p);
-				p.id = productId;
+				try
+				{
+					Product product = dialog.GetProduct();
+					long productId = productsRepository.Insert(product);
+					product.id = productId;
+				}
+				catch (Exception ex)
+				{
+					MessageBox.ErrorQuery("Product creation", ex.Message, "OK");
+				}
+				
 				allProductsListView.SetSource(productsRepository.GetSearchPage(filterValue, pageNumber, pageSize));
 			}
 		}
@@ -239,7 +239,16 @@ namespace Progbase3
 
 			else if (dialog.updated)
 			{
-				bool result = productsRepository.Update(customer.id, dialog.GetProduct());
+				bool result = false;
+				try
+				{
+					result = productsRepository.Update(customer.id, dialog.GetProduct());
+				}
+				catch (Exception ex)
+				{
+					MessageBox.ErrorQuery("Edit product", ex.Message, "OK");
+				}
+
 				if (result)
 				{
 					allProductsListView.SetSource(productsRepository.GetPage(pageNumber, pageSize));

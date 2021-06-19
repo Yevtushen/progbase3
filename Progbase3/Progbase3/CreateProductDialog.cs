@@ -63,14 +63,13 @@ namespace Progbase3
 		}
 
 		public Product GetProduct()
-		{
+		{			
 			return new Product()
 			{
 				name = nameInput.Text.ToString(),
 				price = int.Parse(priceInput.Text.ToString()),
 				left = int.Parse(leftInput.Text.ToString()),
 				description = descriptionInput.Text.ToString()
-				
 			};
 		}
 

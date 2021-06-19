@@ -12,14 +12,13 @@ namespace LibraryClass
 		public Customer Register(CustomersRepository customersRepository, string userName, string password, string adress)
 		{
 
-
 			if (!customersRepository.GetToRegister(userName, adress))
 			{
 				string hashedPassword = GetHash(sha256Hash, password);
 				Customer registered = new Customer()
 				{
 					name = userName,
-					adress = adress,
+					address = adress,
 					password = hashedPassword,
 					orders = new List<Order>()
 				};
