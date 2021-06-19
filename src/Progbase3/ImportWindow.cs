@@ -63,15 +63,15 @@ namespace Progbase3
 		{
 			Import import = new Import();
 
-			try
-			{
+			/*try
+			{*/
 				import.ImportProduct(productsRepository, targetFolderLbl.Text.ToString(), zipFileLbl.Text.ToString(), xmlFilePathLbl.Text.ToString());
 				MessageBox.Query("Import", "Imported", "OK");
-			}
-			catch (Exception ex)
+			/*}*/
+			/*catch (Exception ex)
 			{
 				MessageBox.ErrorQuery("Import failed", ex.Message, "OK");
-			}
+			}*/
 		}
 
 		private void SelectZipFile()

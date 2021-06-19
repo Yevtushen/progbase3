@@ -219,7 +219,7 @@ namespace Progbase3
 
 			if (dialog.deleted)
 			{
-				bool result = productsRepository.Delete(customer.id);
+				bool result = productsRepository.Delete(product.id);
 				if (result)
 				{
 					int pages = productsRepository.GetTotalPages(pageSize);

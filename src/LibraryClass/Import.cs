@@ -14,8 +14,11 @@ namespace LibraryClass
 			XmlSerializer formatter = new XmlSerializer(typeof(List<Product>));
 			using (FileStream fs = new FileStream(xmlFilePath, FileMode.OpenOrCreate))
 			{
-				Product product = (Product)formatter.Deserialize(fs);
-				rep.Insert(product);
+				var products = (List<Product>)formatter.Deserialize(fs);
+				foreach (var product in products)
+				{
+					rep.Insert(product);
+				}
 			}
 		}
 	}

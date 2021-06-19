@@ -109,7 +109,7 @@ namespace Progbase3
 
 		private void OnProductDelete()
 		{
-			int index = MessageBox.Query("Delete activity", "Are you sure?", "No", "Yes");
+			int index = MessageBox.Query("Delete product", "Are you sure?", "No", "Yes");
 			if (index == 1)
 			{
 				deleted = true;

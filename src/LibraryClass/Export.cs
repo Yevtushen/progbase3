@@ -12,7 +12,8 @@ namespace LibraryClass
 			XmlSerializer formatter = new XmlSerializer(typeof(List<Product>));
 			using (FileStream fs = new FileStream(xmlFilePath, FileMode.OpenOrCreate))
 			{
-				formatter.Serialize(fs, rep.GetExport(value));
+				var products = rep.GetExport(value);
+				formatter.Serialize(fs, products);
 			}
 			
 			ZipFile.CreateFromDirectory(sourceFolder, zipFile);

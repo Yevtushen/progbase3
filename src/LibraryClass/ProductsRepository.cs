@@ -53,7 +53,7 @@ namespace LibraryClass
         {
             connection.Open();
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = @"INSERT INTO orders (name, price, left, description) VALUES ($name, $price, $left, $description); SELECT last_insert_rowid();";
+            command.CommandText = @"INSERT INTO products (name, price, left, description) VALUES ($name, $price, $left, $description); SELECT last_insert_rowid();";
             command.Parameters.AddWithValue("$name", p.name);
             command.Parameters.AddWithValue("$price", p.price);
             command.Parameters.AddWithValue("$left", p.left);
